@@ -1,6 +1,6 @@
 {
   "title": "Test Video",
-  "duration": 10,
+  "duration": 5640,
   "live": false,
   "sources": [
     {
@@ -12,8 +12,8 @@
   ],
   "textTracks": [
     {
-      "url": "https://example.com/subtitles.vtt",
-      "contentType": "text/vtt",
+      "url": "https://leafstrat.github.io/subtitles/cube.srt",
+      "contentType": "text/srt",
       "name": "English Subtitles",
       "default": true
     }
