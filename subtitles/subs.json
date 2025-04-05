@@ -12,8 +12,8 @@
   ],
   "textTracks": [
     {
-      "url": "https://leafstrat.github.io/subtitles/cube.srt",
-      "contentType": "text/srt",
+      "url": "https://leafstrat.github.io/subtitles/cube.vtt",
+      "contentType": "text/vtt",
       "name": "English Subtitles",
       "default": true
     }
