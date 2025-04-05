@@ -1,13 +1,10 @@
 {
   "title": "Test Video",
   "duration": 5640,
-  "live": false,
   "sources": [
     {
       "url": "https://seed128.bitchute.com/ZayHxkuCjdtH/T6WwQlnWr3r3.mp4",
-      "contentType": "video/mp4",
-      "quality": 1080,
-      "bitrate": 5000
+      "contentType": "video/mp4"
     }
   ],
   "textTracks": [
