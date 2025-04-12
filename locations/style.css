@@ -1,0 +1,22 @@
+body {
+	background-color:#222; color:#999;
+	font-family:arial;
+}
+
+
+pre { 
+	color:teal
+}
+
+a:visited {color:darkred;}
+a{color:red;}
+
+
+p strong {font-size:30px;}
+ 
+li {line-height:22px;}
+
+
+li > strong {color:pink}
+  
+html body ul li ul li strong  {color:#999}
