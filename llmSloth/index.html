@@ -639,7 +639,7 @@ body.fullscreen-codeblock-active #sloth-top-right
    Example: 60px + 312px + (let's say) ~3px buffer = 375px.
    At widths <= 375px, #github-stats-sidebar is removed.
 */
-@media (max-width: 375px) { /* Adjust this value after testing if it feels off */
+@media (max-width: 575px) { /* Adjust this value after testing if it feels off */
 
     /* Rule: remove the right sidebar, #github-stats-sidebar. */
     #github-stats-sidebar:not(.hidden-by-fullscreen) { /* Allow JS to hide it too for fullscreen */
@@ -649,6 +649,11 @@ body.fullscreen-codeblock-active #sloth-top-right
     /* Rule: now the #brown layout is maximized to the right (within #content-layout which has flex-grow:1) */
     /* Rule: sidebar-layout is squished very compactly (styles from max-width:1359px for min-width and padding still apply) */
 }
+
+h1 {font-size:16px; margin-bottom:0px;}
+#brown {color:#d4dbcc;}
+
+.message-container p:first-of-type {margin-top:0px;}
   </style>
 </head>
 <body>
