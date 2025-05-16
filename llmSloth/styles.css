@@ -648,25 +648,27 @@ margin: 0;
 display: block;
 padding: 7px 10px;
 text-decoration: none;
-color: #aaccff;
+color: #737373;
 border-radius: 3px;
 white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
 font-size: 0.85em;
 margin-bottom: 3px; 
+background-color: #c4ccba;
 }
 
 #recent-chats-sidebar li a:hover {
-background-color: #3a3a40;
+background-color: #666335;
 color: #ffffff;
 }
 #recent-chats-sidebar li a.active-chat-link {
-background-color: #c4ccba;
-color: #737373;
+background-color: #666335;
+color: #fff;
 font-weight: bold;
 }
 #recent-chats-sidebar li .no-chats-message { /* Style for "No recent chats" */
+background-color: #c4ccba;
 font-style: italic;
 color: #999;
 padding: 8px 10px;
