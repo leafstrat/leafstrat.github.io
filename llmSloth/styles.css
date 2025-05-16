@@ -102,21 +102,14 @@ body
     font-weight: bold;
     color: #666335;
     margin-left: -2px;
-    min-height: 52px; /* Approx padding (11+11) + font-size (30) + line-height buffer */
+ height: 58px;
     line-height: 1.2; /* Explicit line-height */
     box-sizing: border-box; /* Include padding in height calculation */
 }
 
-#brown
-{
-    flex-grow: 1; /* Takes available vertical space within content-layout */
-    background-color: #666335;
-    padding-top: 10px; /* Add some padding for the chat ID link */
-}
-
-#chat-id-link-container {
-    padding-left: 10px;
-    margin-bottom: 10px;
+#brown {
+  flex-grow: 1;
+   background-color: #666335;  
 }
 
 #chat-id-link-container a {
@@ -241,7 +234,6 @@ pre
 {
     padding: var(--pre-padding);
     overflow: auto;
-    transition: outline .1s, box-shadow .1s, max-height 0.3s ease-in-out;
     margin-top: 0;
     margin-bottom: 0;
     background: var(--bg-pre);
@@ -358,7 +350,7 @@ pre[data-nav-id]
     box-sizing: border-box;
     border-top: 1px solid #666335;
     border-bottom: 0px;
-    max-height: 91px;
+    max-height: 90px;
     overflow: hidden;
 }
 
@@ -436,7 +428,6 @@ pre.codeblock-expanded::after
     color: var(--text-notification);
     padding: var(--notification-padding);
     border-radius: var(--notification-border-radius);
-    transition: opacity .3s;
     opacity: 0;
     z-index: 1000;
     pointer-events: none;
@@ -485,6 +476,9 @@ body.fullscreen-codeblock-active #content-layout
     overflow: hidden; /* Prevent #content-layout from scrolling */
 }
 
+.fullscreen-codeblock-active #brown {
+background-color: var(--bg-body);	
+}
 body.fullscreen-codeblock-active .fullscreen-parent-active
 {
     margin: 0 !important;
@@ -494,8 +488,13 @@ body.fullscreen-codeblock-active .fullscreen-parent-active
     flex-direction: column; /* Stack children vertically */
     height: 100vh; /* Parent should also take full height */
     overflow: hidden;
+		max-width: 890px;
+		margin: auto !important;
 }
 
+
+pre {
+	font-size:10px;}
 body.fullscreen-codeblock-active .fullscreen-active-item
 {
     margin: 0 !important;
@@ -623,3 +622,99 @@ h1 {font-size:16px; margin-bottom:0px;}
 #brown {color:#d4dbcc;}
 
 .message-container p:first-of-type {margin-top:0px;}
+
+
+#recent-chats-sidebar {
+position:fixed;
+top:270px;
+left:77px;
+width: 230px;
+flex-shrink: 0; 
+color: #e0e0e0;
+padding: 10px;
+box-sizing: border-box;
+height: 100vh;
+overflow-y: auto;  
+}
+
+
+#recent-chats-sidebar ul {
+list-style-type: none;
+padding: 0;
+margin: 0;
+}
+
+#recent-chats-sidebar li a {
+display: block;
+padding: 7px 10px;
+text-decoration: none;
+color: #aaccff;
+border-radius: 3px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+font-size: 0.85em;
+margin-bottom: 3px; 
+}
+
+#recent-chats-sidebar li a:hover {
+background-color: #3a3a40;
+color: #ffffff;
+}
+#recent-chats-sidebar li a.active-chat-link {
+background-color: #c4ccba;
+color: #737373;
+font-weight: bold;
+}
+#recent-chats-sidebar li .no-chats-message { /* Style for "No recent chats" */
+font-style: italic;
+color: #999;
+padding: 8px 10px;
+font-size: 0.85em;
+}
+
+#counter {margin-left:25px;}
+/* Adjust existing sidebar and main content to work within flex */
+.sidebar-layout {
+	flex-shrink: 0;
+	/* width should be defined in styles.css (e.g., var(--sidebar-width)) */
+	height: 100vh;
+	overflow-y: auto;
+	/* Attempt to override fixed positioning if present, for flex layout */
+	position: relative !important; 
+}
+
+
+#content-layout {
+/* 1. Allow #content-layout to stretch vertically with the page */
+height: auto; /* Removes any fixed height like 100vh */
+min-height: 0; /* Often good practice with flex children that might also scroll */
+
+/* 2. Ensure #content-layout is a flex container for #title and #brown */
+display: flex;
+flex-direction: column;
+
+/* 3. If #content-layout's own content (title + brown) overflows, allow scrolling.
+ *    This was in your problematic rule and is generally fine. */
+overflow-y: auto;
+
+/* Retain other useful properties from your existing rules */
+flex-grow: 1; /* Allows it to take available horizontal space in the body's flex row */
+box-sizing: border-box;
+position: relative; /* If needed by its children */
+min-width: 0; /* Good for flex item responsiveness */
+margin-left: var(--content-margin-left-compact); /* From your original styles */
+margin-right: var(--content-margin-right-compact); /* From your original styles */
+}
+
+/* Fixed elements like sloth and github stats should remain unaffected */
+
+/* ADDED: Style for elements hidden during fullscreen */
+.hidden-by-fullscreen {
+	display: none !important;
+}
+
+/* ADDED: Style for fullscreen codeblock padding */
+.fullscreen-codeblock-active .fullscreen-active-item {
+	padding-bottom: 200px !important;
+}
