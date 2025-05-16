@@ -4,657 +4,7 @@
   <meta charset="UTF-8">
   <title>LLM Sloth</title>
   <link rel="icon" href="favicon.png" type="image/x-icon">
-  <style>:root
-{
-    --font-sans: sans-serif;
-    --bg-body: #d4dbcc;
-    --bg-pre: var(--bg-body);
-    --bg-code-block: #f3f3f3;
-    --text-main: #444;
-    --text-comment: #697070;
-    --text-punctuation-tag: rgba(68, 68, 68, 0.667);
-    --text-strong-red: #800;
-    --text-link-operator: #ab5656;
-    --text-literal: #695;
-    --text-green-code: #397300;
-    --text-meta-blue: #1f7199;
-    --text-meta-string-blue: #38a;
-    --text-counter: #fff;
-    --bg-counter-initial: rgba(0, 0, 0, 0.12);
-    --bg-counter-final: #666335;
-    --text-time-column: #888;
-    --text-notification: #fff;
-    --bg-notification: #333;
-    --color-active-highlight: #28a745;
-    --spacing-unit: 0.5rem;
-    --sidebar-width: 7rem; /* 112px if 1rem = 16px */
-    --content-padding: calc(var(--spacing-unit) * 3);
-    --message-margin-top: 1.25rem;
-    --message-padding: 0.1875rem;
-    --pre-padding: 0.0625rem;
-    --code-block-padding: 1em;
-    --inline-code-padding: 0.1875rem 0.3125rem;
-    --codeblock-max-height: 10.5rem;
-    --counter-padding: 0.3125rem 0.625rem;
-    --counter-font-size: 1.075rem;
-    --counter-border-radius: 0.9375rem;
-    --counter-holder-margin-bottom: 1.25rem;
-    --time-block-padding-y: 0.3125rem;
-    --time-block-margin-bottom: 0.625rem;
-    --notification-padding: 0.625rem 1.25rem;
-    --notification-border-radius: 0.3125rem;
-    --notification-offset: 1.25rem;
-    --content-margin-left-maximized: 15%; /* For wide screens */
-    --content-margin-right-maximized: 0%; /* For wide screens */
-    --content-margin-left-compact: 0; /* Default for medium/small screens */
-    --content-margin-right-compact: 0; /* Default for medium/small screens */
-    --sidebar-min-width-squished: 60px; /* Defined tightest point for sidebar-layout, includes padding */
-    --sidebar-squished-padding: 5px;
-}
-
-/* Global Styles */
-*:focus
-{
-    outline: none !important;
-}
-
-body
-{
-    font-family: var(--font-sans);
-    padding: 0;
-    margin: 0;
-    background: var(--bg-body);
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Layout */
-.sidebar-layout
-{
-    width: var(--sidebar-width);
-    padding-top: 2.6rem;
-    padding-left: var(--spacing-unit);
-    padding-right: var(--spacing-unit);
-    padding-bottom: var(--content-padding);
-    position: sticky;
-    top: 0;
-    left: 39px; /* Original offset for wide screens */
-    align-self: flex-start;
-    max-height: 100vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 100;
-    flex-shrink: 0; /* Does not shrink by default */
-    box-sizing: border-box;
-}
-
-#content-layout
-{
-    flex-grow: 1; /* Takes available horizontal space */
-    margin-left: var(--content-margin-left-compact); /* Default */
-    margin-right: var(--content-margin-right-compact); /* Default */
-    min-width: 0; /* Crucial for allowing flex items to shrink properly */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Content Elements */
-#title
-{
-    padding: 11px 0px 11px 0px;
-    font-size: 30px;
-    font-weight: bold;
-    color: #666335;
-    margin-left: -2px;
-    /* Add these lines */
-    min-height: 52px; /* Approx padding (11+11) + font-size (30) + line-height buffer */
-    line-height: 1.2; /* Explicit line-height */
-    box-sizing: border-box; /* Include padding in height calculation */
-}
-
-#brown
-{
-    flex-grow: 1; /* Takes available vertical space within content-layout */
-    background-color: #666335;
-    /* min-width could be set here if #brown itself needs a minimum drawing space
-       before #github-stats-sidebar is removed. For now, relying on content. */
-}
-
-/* Counter Component */
-.counter_holder
-{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: var(--counter-holder-margin-bottom);
-}
-
-.counter
-{
-    color: var(--text-counter);
-    padding: var(--counter-padding);
-    font-size: var(--counter-font-size);
-    border-radius: var(--counter-border-radius);
-}
-
-.counter.loaded
-{
-    background-color: var(--bg-counter-final);
-}
-
-#counter-text-span
-{
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-#counter-text-span.loaded
-{
-    opacity: 1;
-}
-
-/* Time Column Component */
-#time_column_container
-{
-    width: 100%;
-}
-
-.time_column
-{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--text-time-column);
-}
-
-.time_block
-{
-    width: 100%;
-    padding: var(--time-block-padding-y) 0;
-    text-align: center;
-    margin-bottom: var(--time-block-margin-bottom);
-}
-
-.time_days,
-.time_seconds
-{
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1;
-}
-
-.time_days_text,
-.time_seconds_text
-{
-    font-size: 0.625rem;
-    line-height: 1;
-}
-
-.time_year
-{
-    font-size: 1.125rem;
-    font-weight: 700;
-    line-height: 1;
-}
-
-.time_month
-{
-    font-size: 0.75rem;
-    line-height: 1;
-}
-
-.time_hour
-{
-    font-size: 1rem;
-    line-height: 1;
-}
-
-/* Message Container */
-.message-container
-{
-    padding: var(--message-padding);
-    margin-bottom: 5px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: relative;
-    box-sizing: border-box;
-}
-
-.message-container pre:first-of-type
-{
-    border-top: 0px solid #666335;
-}
-
-/* Code Blocks & Syntax Highlighting (Highlight.js) */
-pre
-{
-    padding: var(--pre-padding);
-    overflow: auto;
-    transition: outline .1s, box-shadow .1s, max-height 0.3s ease-in-out;
-    margin-top: 0;
-    margin-bottom: 0;
-    background: var(--bg-pre); 
-    overflow-y: hidden;
-    position: relative;
-}
-
-
-
-code.hljs
-{
-    padding: var(--inline-code-padding);
-}
-
-.hljs
-{
-    background: var(--bg-body); /* Changed from #d4dbcc to var */
-    color: var(--text-main);
-}
-
-.hljs-tag .hljs-attr,
-.hljs-tag .hljs-name
-{
-    color: var(--text-main);
-}
-
-.hljs-comment
-{
-    color: var(--text-comment);
-}
-
-.hljs-punctuation,
-.hljs-tag
-{
-    color: var(--text-punctuation-tag);
-}
-
-.hljs-attribute,
-.hljs-doctag,
-.hljs-keyword,
-.hljs-meta .hljs-keyword,
-.hljs-name,
-.hljs-selector-tag,
-.hljs-strong
-{
-    font-weight: 700;
-}
-
-.hljs-deletion,
-.hljs-number,
-.hljs-quote,
-.hljs-selector-class,
-.hljs-selector-id,
-.hljs-string,
-.hljs-template-tag,
-.hljs-type
-{
-    color: var(--text-strong-red);
-}
-
-.hljs-section,
-.hljs-title
-{
-    color: var(--text-strong-red);
-    font-weight: 700;
-}
-
-.hljs-link,
-.hljs-operator,
-.hljs-regexp,
-.hljs-selector-attr,
-.hljs-selector-pseudo,
-.hljs-symbol,
-.hljs-template-variable,
-.hljs-variable
-{
-    color: var(--text-link-operator);
-}
-
-.hljs-literal
-{
-    color: var(--text-literal);
-}
-
-.hljs-addition,
-.hljs-built_in,
-.hljs-bullet,
-.hljs-code
-{
-    color: var(--text-green-code);
-}
-
-.hljs-meta
-{
-    color: var(--text-meta-blue);
-}
-
-.hljs-meta .hljs-string
-{
-    color: var(--text-meta-string-blue);
-}
-
-.hljs-emphasis
-{
-    font-style: italic;
-}
-
-/* Navigable Code Blocks (pre[data-nav-id]) */
-pre[data-nav-id]
-{
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    border-top: 1px solid #666335;
-    border-bottom: 0px;
-    max-height: 91px;
-    overflow: hidden;
-}
-
-pre code.hljs
-{
-    display: block;
-    overflow-x: auto; 
-		padding-top:3px; 
-		padding-bottom:1px;
-		padding-left:10px;
-		padding-right:10px;
-}
-
-pre[data-nav-id]::after
-{
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 20px;
-    padding-right: 5px;
-    padding-top: 5px;
-    background: linear-gradient(to right, transparent, #bfafaf1f);
-    text-align: center;
-    pointer-events: none;
-    display: flex;
-    align-items: right;
-    justify-content: right;
-    font-size: 0.8em;
-    color: var(--text-main);
-    opacity: 0.8;
-}
-
-pre[data-nav-id][data-line-count]:not(.codeblock-expanded)::after
-{
-    content: attr(data-line-count) " LOC";
-}
-
-pre[data-nav-id][data-loc-count-hidden="true"]::after
-{
-    display: none !important;
-}
-
-pre[data-nav-id].nav-active
-{
-    border-color: #666335;
-}
-
-pre[data-nav-id].nav-active code.hljs
-{
-    background: #f0fbe4 !important;
-}
-
-/* Expanded Code Blocks */
-pre.codeblock-expanded
-{
-    max-height: none !important;
-    overflow-y: auto;
-}
-
-pre.codeblock-expanded::after
-{
-    display: none;
-}
-
-/* Notification Component */
-.custom-notification
-{
-    position: fixed;
-    bottom: var(--notification-offset);
-    right: var(--notification-offset);
-    background-color: var(--bg-notification);
-    color: var(--text-notification);
-    padding: var(--notification-padding);
-    border-radius: var(--notification-border-radius);
-    transition: opacity .3s;
-    opacity: 0;
-    z-index: 1000;
-    pointer-events: none;
-}
-
-.custom-notification.show
-{
-    opacity: 1;
-}
-
-/* Mascot Image */
-.sloth-img /* Base style for sloth, display state controlled by media queries */
-{
-    position: fixed;
-    width: 220px;
-    height: 220px;
-    z-index: -1;
-    pointer-events: none;
-    display: block; /* Default to visible, hidden by narrower media query */
-}
-
-#sloth-top-right
-{
-    top: 40px;
-    left: 98px;
-}
-
-/* Fullscreen Mode Styles */
-body.fullscreen-codeblock-active
-{
-    background-color: var(--bg-body);
-}
-
-body.fullscreen-codeblock-active .sidebar-layout
-{
-    display: none !important;
-}
-
-body.fullscreen-codeblock-active #content-layout
-{
-    margin-left: var(--content-margin-left-compact) !important;
-    margin-right: var(--content-margin-right-compact) !important;
-    max-width: 100%;
-}
-
-body.fullscreen-codeblock-active .fullscreen-parent-active
-{
-    margin: 0 !important;
-    /* margin-left: 297px !important; /* This value might need to be dynamic or re-evaluated - Commented out as it might conflict with full width */
-    padding: 0 !important;
-    border: none !important;
-    display: block !important;
-}
-
-body.fullscreen-codeblock-active .fullscreen-active-item
-{
-    margin: 0 !important;
-    border: 1px solid #666335 !important;
-    box-sizing: border-box;
-    display: block !important;
-}
-
-body.fullscreen-codeblock-active pre[data-nav-id]::after
-{
-    display: none;
-}
-
-.hidden-by-fullscreen,
-.hidden-by-fullscreen-sibling
-{
-    display: none !important;
-}
-
-/*
-body.fullscreen-codeblock-active #sloth-top-right
-{
-    display: block !important; /* Sloth can be visible in fullscreen if desired - This is now controlled by JS and .hidden-by-fullscreen */
-/*    z-index: 10;
-}
-*/
-
-/* GitHub Stats Sidebar specific styles */
-#github-stats-sidebar
-{
-    height: auto; /* Allow content to define height */
-    width: 312px;
-    min-width: 312px; /* Prevent shrinking beyond this */
-    padding-top:52px;
-    font-size: 14px;
-    color: #666335;
-    flex-shrink: 0; /* Ensures it doesn't shrink in the flex layout */
-    /* position: sticky; top: 0; align-self: flex-start; max-height: 100vh; */ /* Optional sticky behavior */
-    /* overflow-y: auto; */ /* Optional if content can exceed viewport height */
-}
-
-#github-stats-sidebar ul li:nth-of-type(odd)::before {
-    content: "⬭";
-}
-#github-stats-sidebar ul li:nth-of-type(even)::before {
-    content: "⬬";
-}
-
-#github-stats-sidebar ul li::before {
-    padding-right: 5px;
-}
-
-#github-stats-sidebar p {
-    padding-left:20px;
-    margin: 6.7px 0;
-}
-#gh-stats-commit-messages li:nth-of-type(odd) {color:#555;}
-#gh-stats-commit-messages li:nth-of-type(even) {color:#666335;}
-
-#gh-stats-commit-messages li {font-size:11px;}
-
-#github-stats-sidebar strong {
-    font-weight: 600;
-}
-#github-stats-sidebar ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 8px 0 0 0;
-}
-#github-stats-sidebar ul li {
-    margin-bottom: 4px;
-    padding-left: 33px;
-    padding-right: 33px;
-    text-indent: -13px;
-    word-break: break-word;
-    padding-top:11px;
-    padding-bottom:9px;
-    border-top:1px solid #b3b19360;
-}
-
-.gh-stats-time-critical {
-    color: #D32F2F !important;
-    font-weight: bold !important;
-}
-.gh-stats-loading {
-    font-style: italic;
-}
-
-
-/* Media Queries */
-
-/* Styles for very wide screens (original behavior) */
-@media (min-width: 1360px)
-{
-    #content-layout:not(body.fullscreen-codeblock-active #content-layout)
-    {
-        margin-left: var(--content-margin-left-maximized);
-        margin-right: var(--content-margin-right-maximized);
-    }
-
-    /* Sloth is visible by default due to .sloth-img base style */
-    /* .sidebar-layout retains its default wide-screen styles */
-
-    /* Ensure fullscreen specific overrides are maintained if needed */
-    body.fullscreen-codeblock-active #content-layout
-    {
-        /* margin-left: var(--content-margin-left-maximized) !important; /* Fullscreen should be full width */
-        /* margin-right: var(--content-margin-right-maximized) !important; /* Fullscreen should be full width */
-        /* padding-left: 113px !important; /* This was in original, might need review for consistency - Fullscreen should be full width */
-    }
-}
-
-/* Responsive changes as window first starts to get thinner */
-@media (max-width: 1359px)
-{
-    /* Rule: get rid of the sloth */
-     /* #sloth-top-right:not(body.fullscreen-codeblock-active #sloth-top-right) - This logic is now primarily handled by JS for fullscreen cases */
-    #sloth-top-right
-    {
-        display: none; /* Default to hidden on smaller screens, JS will manage for fullscreen */
-    }
-    body.fullscreen-codeblock-active #sloth-top-right.hidden-by-fullscreen { /* Ensure it stays hidden if class is applied */
-        display: none !important;
-    }
-
-
-    /* Rule: move sidebar-layout to be attached to the left side of #brown (via viewport)
-             and allow it to be crushed */
-    .sidebar-layout
-    {
-        left: 0; /* Attach to viewport edge */
-        /* #content-layout already has margin-left:0 by default (compact) at this width,
-           so #brown will be to its right. */
-
-        width: auto; /* Allow it to shrink from its original var(--sidebar-width) */
-        max-width: var(--sidebar-width); /* But not grow larger than original */
-        min-width: var(--sidebar-min-width-squished); /* Its "tightest point" width */
-        flex-shrink: 1; /* Allow this flex item to shrink */
-
-        /* Padding for the "5px room on each side" when squished */
-        padding-left: var(--sidebar-squished-padding);
-        padding-right: var(--sidebar-squished-padding);
-    }
-    /* #content-layout (containing #brown) will take up space next to the shrinking .sidebar-layout
-       because of flex-grow:1. #github-stats-sidebar is still present with its fixed width.
-    */
-}
-
-/* Further responsive changes: when sidebar-layout is at its tightest point, remove #github-stats-sidebar.
-   Breakpoint calculated as:
-   min-width of .sidebar-layout (var(--sidebar-min-width-squished))
-   + width of #github-stats-sidebar (312px)
-   + a minimal conceptual width for #brown (e.g., ~1px to 50px) for #brown to exist before right sidebar is removed.
-   Example: 60px + 312px + (let's say) ~3px buffer = 375px.
-   At widths <= 375px, #github-stats-sidebar is removed.
-*/
-@media (max-width: 575px) { /* Adjust this value after testing if it feels off */
-
-    /* Rule: remove the right sidebar, #github-stats-sidebar. */
-    #github-stats-sidebar:not(.hidden-by-fullscreen) { /* Allow JS to hide it too for fullscreen */
-        display: none;
-    }
-
-    /* Rule: now the #brown layout is maximized to the right (within #content-layout which has flex-grow:1) */
-    /* Rule: sidebar-layout is squished very compactly (styles from max-width:1359px for min-width and padding still apply) */
-}
-
-h1 {font-size:16px; margin-bottom:0px;}
-#brown {color:#d4dbcc;}
-
-.message-container p:first-of-type {margin-top:0px;}
-  </style>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <aside class="sidebar-layout">
@@ -664,8 +14,9 @@ h1 {font-size:16px; margin-bottom:0px;}
     <div id="time_column_container"></div>
   </aside>
   <main id="content-layout">
-			<div id="title"> </div> 
+			<div id="title"> </div>
 		<div id="brown">
+            <div id="chat-id-link-container"></div>
 			<div id="content"></div>
     </div>
   </main>
@@ -680,15 +31,20 @@ h1 {font-size:16px; margin-bottom:0px;}
   <img src="https://em-content.zobj.net/source/google/223/sloth_1f9a5.png" class="sloth-img" id="sloth-top-right">
 
   <script>
-    // Global scope within IIFE for these elements and state
+    // Script-level global variables (IIFE will close over these)
     let slothElement, githubStatsSidebarElement;
     let lastScrollPositionBeforeFullscreen = 0;
     let navigableItems = [];
     let currentIndex = 0;
-    let totalNavigable = 0; // Will be updated after items are processed
-    let CODEBLOCK_MAX_HEIGHT_PX; // Will be calculated
+    let totalNavigable = 0;
+    let CODEBLOCK_MAX_HEIGHT_PX;
+    // initialTimestampDate and secondsUpdateInterval are now moved into the IIFE
 
     (async function () {
+      // IIFE-scoped state for time column
+      let initialTimestampDate;
+      let secondsUpdateInterval;
+
       const PARAMS_ID_KEY = 'id';
       const MISSING_ID_MESSAGE = 'Missing ?id=...';
       const CATBOX_URL_PREFIX = 'https://files.catbox.moe/';
@@ -710,6 +66,7 @@ h1 {font-size:16px; margin-bottom:0px;}
       const HLJS_MAX_RETRIES = 2;
 			const MIN_LINES_FOR_FULLSCREEN = 10;
       const MIN_LOC_TO_SHOW_COUNT = 7;
+      const SECONDS_UPDATE_INTERVAL_MS = 10000; // Now correctly scoped
 
       const MAXIMIZED_CONTENT_MARGIN_LEFT_PERCENT = 15;
       const MAXIMIZED_CONTENT_MARGIN_RIGHT_PERCENT = 0;
@@ -726,11 +83,101 @@ h1 {font-size:16px; margin-bottom:0px;}
       const contentContainer = document.getElementById('content');
       const counterElement = document.getElementById('counter');
       const counterTextSpan = document.getElementById('counter-text-span');
-      const titleElement = document.getElementById('title'); 
+      const titleElement = document.getElementById('title');
+      const brownElement = document.getElementById('brown');
+      const chatIdLinkContainer = document.getElementById('chat-id-link-container');
 
-      // Initialize references to elements that will be toggled in fullscreen
       slothElement = document.getElementById('sloth-top-right');
       githubStatsSidebarElement = document.getElementById('github-stats-sidebar');
+
+      // --- Time Column Helper Functions (Moved Inside IIFE) ---
+      function formatSecondsForDisplay(seconds) {
+          if (seconds < 100000) {
+            return seconds.toLocaleString(undefined, { useGrouping: true });
+          } else {
+            const thousands = Math.floor(seconds / 1000);
+            return thousands.toLocaleString(undefined, { useGrouping: true }) + 'k';
+          }
+      }
+
+      function updateLiveSecondsCounter() {
+          if (!initialTimestampDate) return; // Guard clause
+
+          const currentDate = new Date();
+          const diffTime = Math.abs(currentDate - initialTimestampDate);
+          const diffSeconds = Math.floor(diffTime / 1000);
+
+          const secondsValueElement = document.querySelector('.time_column .time_seconds');
+          if (secondsValueElement) {
+              secondsValueElement.textContent = formatSecondsForDisplay(diffSeconds);
+          }
+      }
+
+      function createTimeColumn(timestamp) {
+        const timeColumn = document.createElement('div');
+        timeColumn.className = 'time_column';
+
+        initialTimestampDate = new Date(timestamp); // Store for live updates
+        const currentDate = new Date();
+
+        const diffTime = Math.abs(currentDate - initialTimestampDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffSecondsInitial = Math.floor(diffTime / 1000);
+
+        const year = initialTimestampDate.getFullYear();
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        const month = monthNames[initialTimestampDate.getMonth()];
+
+        const localHours = initialTimestampDate.getHours();
+        const localAMPM = localHours >= 12 ? 'pm' : 'am';
+        let displayHours = localHours % 12;
+        displayHours = displayHours ? displayHours : 12;
+        
+        const secondsBlock = document.createElement('div');
+        secondsBlock.className = 'time_block';
+        secondsBlock.innerHTML = `
+          <div class="time_seconds">${formatSecondsForDisplay(diffSecondsInitial)}</div>
+          <div class="time_seconds_text">seconds old</div>
+        `;
+
+        const daysBlock = document.createElement('div');
+        daysBlock.className = 'time_block';
+        const daysTextLabel = diffDays === 1 ? "day old" : "days old";
+        daysBlock.innerHTML = `
+          <div class="time_days">${diffDays}</div>
+          <div class="time_days_text">${daysTextLabel}</div>
+        `;
+
+        const dateBlock = document.createElement('div');
+        dateBlock.className = 'time_block';
+        dateBlock.innerHTML = `
+          <div class="time_year">${year}</div>
+          <div class="time_month">${month}</div>
+        `;
+
+        const timeBlock = document.createElement('div');
+        timeBlock.className = 'time_block';
+        timeBlock.innerHTML = `
+          <div class="time_hour">${displayHours}${localAMPM}</div>
+        `;
+
+        timeColumn.appendChild(secondsBlock);
+        timeColumn.appendChild(daysBlock);
+        timeColumn.appendChild(dateBlock);
+        timeColumn.appendChild(timeBlock);
+
+        const timeColumnContainer = document.getElementById('time_column_container');
+        if (timeColumnContainer) {
+            timeColumnContainer.innerHTML = ''; // Clear previous if any
+            timeColumnContainer.appendChild(timeColumn);
+        }
+
+        if (secondsUpdateInterval) clearInterval(secondsUpdateInterval); // Clear existing interval if any
+        secondsUpdateInterval = setInterval(updateLiveSecondsCounter, SECONDS_UPDATE_INTERVAL_MS);
+      }
+      // --- End of Time Column Helper Functions ---
 
       if (!id) {
         contentContainer.textContent = MISSING_ID_MESSAGE;
@@ -755,24 +202,25 @@ h1 {font-size:16px; margin-bottom:0px;}
         const data = await res.json();
 
         if (data.timestamp) {
-          createTimeColumn(data.timestamp);
+          createTimeColumn(data.timestamp); // Call the now IIFE-scoped function
         }
 
-        // Determine the title string
         const displayTitle = data.chatTitle && data.chatTitle.trim() !== "" ? data.chatTitle.trim() : DEFAULT_DOCUMENT_TITLE;
-
-        // Set both the document title and the H1-like element's text
         document.title = displayTitle;
-        if (titleElement) { // <-- Add this block
+        if (titleElement) {
           titleElement.textContent = displayTitle;
         } else {
           console.warn("Title element (#title) not found.");
         }
 
-        // document.title = data.chatTitle && data.chatTitle.trim() !== "" ? data.chatTitle.trim() : DEFAULT_DOCUMENT_TITLE; // <-- This line is now replaced by the block above
-        contentContainer.innerHTML = ''; // Clear existing content *after* setting title
-        
-        document.title = data.chatTitle && data.chatTitle.trim() !== "" ? data.chatTitle.trim() : DEFAULT_DOCUMENT_TITLE;
+        if (data.chatId && data.chatId.trim() !== "" && data.chatId.trim().toLowerCase() !== "new_chat") {
+            const chatIdLink = document.createElement('a');
+            chatIdLink.href = `https://aistudio.google.com/prompts/${data.chatId}`;
+            chatIdLink.textContent = `Chat ID: ${data.chatId}`;
+            chatIdLink.target = "_blank";
+            chatIdLinkContainer.appendChild(chatIdLink);
+        }
+
         contentContainer.innerHTML = '';
 
         if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
@@ -782,7 +230,6 @@ h1 {font-size:16px; margin-bottom:0px;}
             });
         }
 
-        // navigableItems is already declared in the outer scope
         let globalNavIdCounter = 0;
 
         if (data.modelMessages && Array.isArray(data.modelMessages)) {
@@ -809,7 +256,7 @@ h1 {font-size:16px; margin-bottom:0px;}
             contentContainer.textContent = NO_MESSAGES_ERROR;
             return;
         }
-        totalNavigable = navigableItems.length; // Update global total
+        totalNavigable = navigableItems.length;
 
         function applyHighlighting(retries = HLJS_MAX_RETRIES) {
             if (typeof hljs !== 'undefined' && hljs.highlightElement) {
@@ -820,7 +267,7 @@ h1 {font-size:16px; margin-bottom:0px;}
             } else if (retries > 0) {
                 setTimeout(() => applyHighlighting(retries - 1), HLJS_RETRY_DELAY_MS);
             } else {
-                updateLineCounts(); // Still update counts even if highlighting fails
+                updateLineCounts();
             }
         }
 
@@ -842,7 +289,6 @@ h1 {font-size:16px; margin-bottom:0px;}
             });
         }
 
-        // currentIndex is already declared in the outer scope
         if (id && totalNavigable > 0) {
             const savedIndex = localStorage.getItem(`llmReader_pos_${id}`);
             if (savedIndex !== null) {
@@ -874,9 +320,6 @@ h1 {font-size:16px; margin-bottom:0px;}
             if (isFullscreen) return;
             event.preventDefault();
             navigatePrevious();
-          } else if (key === 'c') {
-            event.preventDefault();
-            copyCurrentItem();
           } else if (event.code === 'Space' || event.key === ' ') {
             event.preventDefault();
             toggleExpandCurrent();
@@ -901,7 +344,8 @@ h1 {font-size:16px; margin-bottom:0px;}
                     currentIndex = newIndex;
                     highlightItem(currentIndex);
                     updateCounter();
-                    scrollToItem(currentIndex); // Scroll to clicked item
+                    copyCurrentItem();
+                    scrollToItem(currentIndex);
                 }
             }
         });
@@ -911,6 +355,7 @@ h1 {font-size:16px; margin-bottom:0px;}
           currentIndex++;
           highlightItem(currentIndex);
           updateCounter();
+          copyCurrentItem();
           scrollToItem(currentIndex);
         }
 
@@ -919,6 +364,7 @@ h1 {font-size:16px; margin-bottom:0px;}
           currentIndex--;
           highlightItem(currentIndex);
           updateCounter();
+          copyCurrentItem();
           scrollToItem(currentIndex);
         }
 
@@ -959,7 +405,7 @@ h1 {font-size:16px; margin-bottom:0px;}
             const viewportTop = SCROLL_VIEW_OFFSET_PX;
             const viewportBottom = window.innerHeight - (SCROLL_VIEW_OFFSET_PX / 2);
 
-            if (rect.top < viewportTop || rect.bottom > viewportBottom || rect.height === 0) { // height === 0 for initially hidden/unrendered
+            if (rect.top < viewportTop || rect.bottom > viewportBottom || rect.height === 0) {
                  window.scrollTo({ top: window.pageYOffset + rect.top - viewportTop, behavior: 'smooth' });
             }
         }
@@ -978,9 +424,10 @@ h1 {font-size:16px; margin-bottom:0px;}
               navigator.clipboard.writeText(textToCopy)
                 .then(() => {
                   const firstLine = textToCopy.split('\n')[0].substring(0, NOTIFICATION_BODY_MAX_LENGTH) + (textToCopy.split('\n')[0].length > NOTIFICATION_BODY_MAX_LENGTH ? '...' : '');
-                  showBrowserNotification(notificationTitle, firstLine);
+                  //showBrowserNotification(notificationTitle, firstLine);
                 })
                 .catch(err => {
+                  console.error("Failed to copy to clipboard:", err);
                   showBrowserNotification(COPY_FAIL_TITLE, COPY_FAIL_BODY, true);
                 });
             }
@@ -1018,6 +465,20 @@ h1 {font-size:16px; margin-bottom:0px;}
           }
         }
 
+    function hideNonAncestorsOrTarget(currentDomElement, targetDomElement) {
+        if (currentDomElement === targetDomElement) {
+            return;
+        }
+        Array.from(currentDomElement.children).forEach(child => {
+            if (child.tagName === 'STYLE' || child.tagName === 'SCRIPT') return;
+            if (child === targetDomElement || child.contains(targetDomElement)) {
+                hideNonAncestorsOrTarget(child, targetDomElement);
+            } else {
+                child.classList.add('hidden-by-fullscreen-sibling');
+            }
+        });
+    }
+
     function toggleExpandCurrent() {
         if (currentIndex < 0 || currentIndex >= totalNavigable) return;
         const currentItem = navigableItems[currentIndex];
@@ -1029,11 +490,10 @@ h1 {font-size:16px; margin-bottom:0px;}
 
         const codeElement = elementToToggle.querySelector('code');
         const numLines = codeElement ? (codeElement.textContent || '').split('\n').length : 0;
-
         const canGoFullscreen = numLines > MIN_LINES_FOR_FULLSCREEN;
 
         if (!isOverflowing && !isCurrentlyExpanded && !canGoFullscreen) {
-            return; // Nothing to do if not overflowing, not expanded, and can't go fullscreen
+            return;
         }
 
         const wasFullscreenBeforeToggle = document.body.classList.contains('fullscreen-codeblock-active') &&
@@ -1046,71 +506,55 @@ h1 {font-size:16px; margin-bottom:0px;}
             const parentMessageContainer = currentItem.parentMessageContainer;
             const contentRoot = document.getElementById('content');
 
-            if (isNowExpandedAfterToggle) { // Item is now expanded (or should be)
-                if (!wasFullscreenBeforeToggle) { // === ENTERING FULLSCREEN ===
+            if (isNowExpandedAfterToggle) {
+                if (!wasFullscreenBeforeToggle) {
                     lastScrollPositionBeforeFullscreen = window.pageYOffset;
-
                     document.body.classList.add('fullscreen-codeblock-active');
                     if (slothElement) slothElement.classList.add('hidden-by-fullscreen');
                     if (githubStatsSidebarElement) githubStatsSidebarElement.classList.add('hidden-by-fullscreen');
-
                     elementToToggle.classList.add('fullscreen-active-item');
                     if (parentMessageContainer) parentMessageContainer.classList.add('fullscreen-parent-active');
-
                     Array.from(contentRoot.children).forEach(childOfContent => {
-                        if (childOfContent !== parentMessageContainer && childOfContent !== elementToToggle) {
+                        if (childOfContent !== parentMessageContainer) {
                            childOfContent.classList.add('hidden-by-fullscreen');
                         }
                     });
                     if (parentMessageContainer) {
-                        Array.from(parentMessageContainer.children).forEach(sibling => {
-                            if (sibling !== elementToToggle && sibling.tagName !== 'STYLE' && sibling.tagName !== 'SCRIPT') {
-                                sibling.classList.add('hidden-by-fullscreen-sibling');
-                            }
-                        });
+                        hideNonAncestorsOrTarget(parentMessageContainer, elementToToggle);
                     }
-                    
                     setTimeout(() => {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                        elementToToggle.scrollTop = 0; 
                         elementToToggle.focus({ preventScroll: true });
                     }, EXPAND_SCROLL_DEBOUNCE_MS);
-
-                } else { // Already in fullscreen, just ensuring it's expanded and visible (e.g. re-toggle)
+                } else {
                     setTimeout(() => {
-                        const rect = elementToToggle.getBoundingClientRect();
-                        if (rect.top < SCROLL_VIEW_OFFSET_PX || rect.bottom > window.innerHeight - SCROLL_VIEW_OFFSET_PX / 2) {
-                            window.scrollTo({ top: window.pageYOffset + rect.top - SCROLL_VIEW_OFFSET_PX, behavior: 'smooth' });
-                        }
+                        elementToToggle.scrollTop = 0;
                         elementToToggle.focus({ preventScroll: true });
                     }, EXPAND_SCROLL_DEBOUNCE_MS);
                 }
-            } else { // Item is now collapsed
-                if (wasFullscreenBeforeToggle) { // === EXITING FULLSCREEN ===
+            } else {
+                if (wasFullscreenBeforeToggle) {
                     document.body.classList.remove('fullscreen-codeblock-active');
                     if (slothElement) slothElement.classList.remove('hidden-by-fullscreen');
                     if (githubStatsSidebarElement) githubStatsSidebarElement.classList.remove('hidden-by-fullscreen');
-
                     elementToToggle.classList.remove('fullscreen-active-item');
                     if (parentMessageContainer) parentMessageContainer.classList.remove('fullscreen-parent-active');
-                    
                     document.querySelectorAll('.hidden-by-fullscreen, .hidden-by-fullscreen-sibling').forEach(el => {
                         el.classList.remove('hidden-by-fullscreen');
                         el.classList.remove('hidden-by-fullscreen-sibling');
                     });
-
                     elementToToggle.focus({ preventScroll: true });
-                    window.scrollTo({ top: lastScrollPositionBeforeFullscreen, behavior: 'auto' }); // Instant scroll
-                    
+                    window.scrollTo({ top: lastScrollPositionBeforeFullscreen, behavior: 'auto' });
                     setTimeout(() => {
-                        scrollToItem(currentIndex); // Smoothly adjust item into view if needed
+                        scrollToItem(currentIndex);
                     }, EXPAND_SCROLL_DEBOUNCE_MS);
-
-                } else { // Collapsing a large block that was expanded but not in fullscreen mode
+                } else {
                     elementToToggle.focus({ preventScroll: true });
                 }
             }
-        } else { // Not capable of fullscreen (small code block)
-            if (isNowExpandedAfterToggle) { // Expanding a small block
+        } else {
+            if (isNowExpandedAfterToggle) {
                 setTimeout(() => {
                     const rect = elementToToggle.getBoundingClientRect();
                     if (rect.top < SCROLL_VIEW_OFFSET_PX || rect.bottom > window.innerHeight - SCROLL_VIEW_OFFSET_PX / 2) {
@@ -1118,95 +562,26 @@ h1 {font-size:16px; margin-bottom:0px;}
                     }
                     elementToToggle.focus({ preventScroll: true });
                 }, EXPAND_SCROLL_DEBOUNCE_MS);
-            } else { // Collapsing a small block
+            } else {
                 elementToToggle.focus({ preventScroll: true });
             }
         }
     }
 
       } catch (e) {
+        console.error("Error in main IIFE execution:", e); // Added more context to the error log
         contentContainer.textContent = `Error loading or parsing JSON: ${e.message}`;
         document.title = 'Error Loading Chat';
         if (counterElement) counterElement.classList.remove('loaded');
         if (counterTextSpan) counterTextSpan.classList.remove('loaded');
       }
-    })();
-
-    function createTimeColumn(timestamp) {
-      const timeColumn = document.createElement('div');
-      timeColumn.className = 'time_column';
-
-      const timestampDate = new Date(timestamp);
-      const currentDate = new Date();
-
-      const diffTime = Math.abs(currentDate - timestampDate);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      const diffSeconds = Math.floor(diffTime / 1000);
-
-      const year = timestampDate.getFullYear();
-      const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "october", "November", "December"
-      ];
-      const month = monthNames[timestampDate.getMonth()];
-
-      const localHours = timestampDate.getHours();
-      const localAMPM = localHours >= 12 ? 'pm' : 'am';
-      let displayHours = localHours % 12;
-      displayHours = displayHours ? displayHours : 12; // the hour '0' should be '12'
-      
-      const secondsBlock = document.createElement('div');
-      secondsBlock.className = 'time_block';
-
-      function formatSeconds(seconds) {
-        if (seconds < 100000) {
-          return seconds.toLocaleString(undefined, { useGrouping: true });
-        } else {
-          const thousands = Math.floor(seconds / 1000);
-          return thousands.toLocaleString(undefined, { useGrouping: true }) + 'k';
-        }
-      }
-
-      secondsBlock.innerHTML = `
-        <div class="time_seconds">${formatSeconds(diffSeconds)}</div>
-        <div class="time_seconds_text">seconds old</div>
-      `;
-
-      const daysBlock = document.createElement('div');
-      daysBlock.className = 'time_block';
-      const daysTextLabel = diffDays === 1 ? "day old" : "days old";
-      daysBlock.innerHTML = `
-        <div class="time_days">${diffDays}</div>
-        <div class="time_days_text">${daysTextLabel}</div>
-      `;
-
-      const dateBlock = document.createElement('div');
-      dateBlock.className = 'time_block';
-      dateBlock.innerHTML = `
-        <div class="time_year">${year}</div>
-        <div class="time_month">${month}</div>
-      `;
-
-      const timeBlock = document.createElement('div');
-      timeBlock.className = 'time_block';
-      timeBlock.innerHTML = `
-        <div class="time_hour">${displayHours}${localAMPM}</div>
-      `;
-
-      timeColumn.appendChild(secondsBlock);
-      timeColumn.appendChild(daysBlock);
-      timeColumn.appendChild(dateBlock);
-      timeColumn.appendChild(timeBlock);
-
-      const timeColumnContainer = document.getElementById('time_column_container');
-      if (timeColumnContainer) {
-          timeColumnContainer.appendChild(timeColumn);
-      }
-    }
+    })(); // End of main IIFE
   </script>
   <script defer src="marked.min.js"></script>
   <script defer src="highlight.min.js"></script>
 
   <script>
+    // GitHub Stats Sidebar Script (unchanged)
     (function() {
         const GITHUB_API_URL = 'https://gitlook.godoftrickerytestworkers222.workers.dev/';
         const LOCAL_STORAGE_KEY = 'githubUserStats';
@@ -1270,7 +645,7 @@ h1 {font-size:16px; margin-bottom:0px;}
             reposPushedEl.textContent = data.repos_pushed_to !== undefined ? data.repos_pushed_to : 'N/A';
             reposPushedEl.classList.remove(LOADING_CLASS);
 
-            commitMessagesUl.innerHTML = ''; // Clear existing items (e.g., "Loading...")
+            commitMessagesUl.innerHTML = ''; 
             if (data.recent_commit_messages && Array.isArray(data.recent_commit_messages) && data.recent_commit_messages.length > 0) {
                 data.recent_commit_messages
                   .filter(msg => msg.trim().split(/\s+/).length > 1)
@@ -1305,7 +680,6 @@ h1 {font-size:16px; margin-bottom:0px;}
                     if (commitMessagesUl.firstChild && commitMessagesUl.firstChild.classList && commitMessagesUl.firstChild.classList.contains(LOADING_CLASS)) {
                        commitMessagesUl.innerHTML = '';
                     }
-                    // Ensure only one error message if already populated or error shown
                     if (!commitMessagesUl.querySelector('li[style*="color: #D32F2F"]')) {
                         commitMessagesUl.appendChild(errorLi);
                     }
