@@ -815,3 +815,99 @@
             lastCommitEl.textContent = data.last_commit || 'N/A';
             lastCommitEl.classList.remove(LOADING_CLASS);
             if (isLastCommitOld(data.last_commit)) {
+
+                lastCommitEl.classList.add(CRITICAL_TIME_CLASS);
+            } else {
+                lastCommitEl.classList.remove(CRITICAL_TIME_CLASS);
+            }
+
+            commitsMonthEl.textContent = data.commits_past_month !== undefined ? data.commits_past_month : 'N/A';
+            commitsMonthEl.classList.remove(LOADING_CLASS);
+            reposPushedEl.textContent = data.repos_pushed_to !== undefined ? data.repos_pushed_to : 'N/A';
+            reposPushedEl.classList.remove(LOADING_CLASS);
+
+            commitMessagesUl.innerHTML = ''; 
+            if (data.recent_commit_messages && Array.isArray(data.recent_commit_messages) && data.recent_commit_messages.length > 0) {
+                data.recent_commit_messages
+                  .filter(msg => msg.trim().split(/\s+/).length > 1)
+                  .forEach(msg => {
+                    const li = document.createElement('li');
+                    li.textContent = msg;
+                    commitMessagesUl.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No recent messages.';
+                commitMessagesUl.appendChild(li);
+            }
+        }
+
+        async function fetchAndProcessGitHubStats() {
+            try {
+                const response = await fetch(GITHUB_API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+                updateSidebarUI(data);
+            } catch (error) {
+                console.error('Failed to load GitHub stats:', error);
+                const commitMessagesUl = document.getElementById(COMMIT_MESSAGES_ID);
+                if (commitMessagesUl) {
+                    const errorLi = document.createElement('li');
+                    errorLi.textContent = 'Failed to load stats.';
+                    errorLi.style.color = '#D32F2F';
+                    if (commitMessagesUl.firstChild && commitMessagesUl.firstChild.classList && commitMessagesUl.firstChild.classList.contains(LOADING_CLASS)) {
+                       commitMessagesUl.innerHTML = '';
+                    }
+                    if (!commitMessagesUl.querySelector('li[style*="color: #D32F2F"]')) {
+                        commitMessagesUl.appendChild(errorLi);
+                    }
+                }
+                [LAST_COMMIT_ID, COMMITS_MONTH_ID, REPOS_PUSHED_ID].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.classList.contains(LOADING_CLASS)) {
+                        el.textContent = 'Error';
+                        el.classList.remove(LOADING_CLASS);
+                        el.style.color = '#D32F2F';
+                    }
+                });
+            }
+        }
+
+        function initGitHubStatsSidebar() {
+            const sidebarElement = getSidebarElement();
+            if (!sidebarElement) {
+                return;
+            }
+
+            const cachedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (cachedData) {
+                try {
+                    updateSidebarUI(JSON.parse(cachedData));
+                } catch (e) {
+                    console.warn("Failed to parse cached GitHub stats, removing.", e);
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
+                    const commitMessagesUl = document.getElementById(COMMIT_MESSAGES_ID);
+                    if(commitMessagesUl) commitMessagesUl.innerHTML = `<li class="${LOADING_CLASS}">Loading...</li>`;
+                    [LAST_COMMIT_ID, COMMITS_MONTH_ID, REPOS_PUSHED_ID].forEach(id => {
+                        const el = document.getElementById(id);
+                        if(el) {
+                            el.textContent = 'Loading...';
+                            el.classList.add(LOADING_CLASS);
+                            el.style.color = '';
+                        }
+                    });
+                }
+            }
+            fetchAndProcessGitHubStats();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initGitHubStatsSidebar();
+        });
+    })();
+  </script>
+</body>
+</html>
