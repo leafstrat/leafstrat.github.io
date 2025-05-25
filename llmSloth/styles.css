@@ -493,6 +493,73 @@ body.fullscreen-codeblock-active .fullscreen-parent-active
 }
 
 
+
+
+
+/* ... existing styles ... */
+
+/* ADDED: Styles for Copy Catbox Source Button */
+#copy-catbox-source-container {
+position: fixed; 
+top: 250px; 
+left: 87px; 
+width: 210px; 
+padding-bottom: 10px; 
+box-sizing: border-box;
+background-color:transparent;
+z-index: 9999; 
+}
+
+#copy-catbox-source-button {
+display: block;
+width: 100%;
+padding: 7px 10px;
+text-decoration: none;
+color: #737373;  
+background-color:transparent;
+border: 0px solid #b3b19360; /* Subtle border matching recent chat links */
+border-radius: 3px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+font-size: 0.85em;
+text-align: left;
+cursor: pointer;
+font-family: var(--font-sans); 
+}
+
+#copy-catbox-source-button:hover { 
+background-color: #666335; 
+color: white;
+}
+
+#copy-catbox-source-button.active { 
+
+font-weight:bold;
+}
+
+
+#recent-chats-sidebar {
+position:fixed;
+top:270px; /* This remains, as the copy button container is placed above it */
+left:77px;
+flex-shrink: 0; 
+color: #e0e0e0;
+padding: 10px;
+box-sizing: border-box;
+height: calc(100vh - 270px); /* Adjust height if needed, or let it be auto */
+overflow-y: auto;  
+}
+
+/* ... rest of existing styles ... */
+
+/* Ensure .hidden-by-fullscreen applies to the new elements as well */
+.hidden-by-fullscreen,
+.hidden-by-fullscreen-sibling
+{
+	display: none !important;
+}
+
 pre {
 	font-size:10px;}
 body.fullscreen-codeblock-active .fullscreen-active-item
@@ -626,7 +693,7 @@ h1 {font-size:16px; margin-bottom:0px;}
 
 #recent-chats-sidebar {
 position:fixed;
-top:270px;
+top:273px;
 left:77px;
 width: 230px;
 flex-shrink: 0; 

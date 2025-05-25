@@ -4,9 +4,14 @@
   <meta charset="UTF-8">
   <title>LLM Sloth</title>
   <link rel="icon" href="favicon.png" type="image/x-icon">
-	<link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
+  <!-- ADDED CONTAINER AND BUTTON FOR COPY SOURCE -->
+  <div id="copy-catbox-source-container">
+    <button id="copy-catbox-source-button"></button>
+  </div>
+
   <!-- ADDED RECENT CHATS SIDEBAR -->
   <aside id="recent-chats-sidebar"> 
     <ul id="recent-chats-list">
@@ -21,10 +26,10 @@
     <div id="time_column_container"></div>
   </aside>
   <main id="content-layout">
-			<div id="title"> </div>
-		<div id="brown">
+            <div id="title"> </div>
+        <div id="brown">
             <div id="chat-id-link-container"></div>
-			<div id="content"></div>
+            <div id="content"></div>
     </div>
   </main>
   <div id="github-stats-sidebar">
@@ -178,7 +183,7 @@
       const ICON_PATH = '/favicon.ico';
       const HLJS_RETRY_DELAY_MS = 500;
       const HLJS_MAX_RETRIES = 2;
-			const MIN_LINES_FOR_FULLSCREEN = 10;
+                const MIN_LINES_FOR_FULLSCREEN = 10;
       const MIN_LOC_TO_SHOW_COUNT = 7;
       const SECONDS_UPDATE_INTERVAL_MS = 10000; // Now correctly scoped
 
@@ -203,6 +208,7 @@
 
       slothElement = document.getElementById('sloth-top-right');
       githubStatsSidebarElement = document.getElementById('github-stats-sidebar');
+      const copyCatboxSourceButton = document.getElementById('copy-catbox-source-button'); // Get the new button
 
       // --- Time Column Helper Functions (Moved Inside IIFE) ---
       function formatSecondsForDisplay(seconds) {
@@ -295,8 +301,40 @@
 
       if (!id) {
         contentContainer.textContent = MISSING_ID_MESSAGE;
+        if (copyCatboxSourceButton) copyCatboxSourceButton.style.display = 'none'; // Hide button if no ID
         return;
       }
+
+      // --- Copy Catbox Source Button Logic ---
+      if (copyCatboxSourceButton) { // Check if element exists
+          copyCatboxSourceButton.textContent = `files.catbox.moe/${id}.json`;
+          copyCatboxSourceButton.addEventListener('click', async () => {
+              copyCatboxSourceButton.classList.add('active'); // Visual feedback
+              const sourceUrl = `${CATBOX_URL_PREFIX}${id}${CATBOX_URL_SUFFIX}`;
+              try {
+                  const res = await fetch(sourceUrl);
+                  if (!res.ok) {
+                      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                  }
+                  const sourceData = await res.json();
+
+                  if (sourceData.modelMessages && Array.isArray(sourceData.modelMessages)) {
+                      const messagesToCopy = JSON.stringify(sourceData.modelMessages, null, 2);
+                      await navigator.clipboard.writeText(`\`\`\`\n${messagesToCopy}\n\`\`\`\n\n`);
+                      showBrowserNotification("Source Copied", `Copied ${sourceData.modelMessages.length} message(s) from ${id}.json`);
+                  } else {
+                      throw new Error("'modelMessages' not found or not an array.");
+                  }
+              } catch (error) {
+                  console.error("Error copying Catbox source:", error);
+                  showBrowserNotification(COPY_FAIL_TITLE, `Could not copy: ${error.message}`, true);
+              } finally {
+                  setTimeout(() => copyCatboxSourceButton.classList.remove('active'), 300); // Remove visual feedback
+              }
+          });
+      }
+      // --- End of Copy Catbox Source Button Logic ---
+
       const url = `${CATBOX_URL_PREFIX}${id}${CATBOX_URL_SUFFIX}`;
 
       try {
@@ -320,7 +358,7 @@
         }
 
         const displayTitle = data.chatTitle && data.chatTitle.trim() !== "" ? data.chatTitle.trim() : DEFAULT_DOCUMENT_TITLE;
-        document.title = displayTitle;
+        document.title = `${displayTitle} | ${DEFAULT_DOCUMENT_TITLE}`;
         if (titleElement) {
           titleElement.textContent = displayTitle;
         } else {
@@ -390,7 +428,7 @@
             }
         }
 
-		applyHighlighting();
+                applyHighlighting();
 
         function updateLineCounts() {
             document.querySelectorAll('pre[data-nav-id] code').forEach(codeElement => {
@@ -634,6 +672,12 @@
                     if (slothElement) slothElement.classList.add('hidden-by-fullscreen');
                     if (githubStatsSidebarElement) githubStatsSidebarElement.classList.add('hidden-by-fullscreen');
                     if (titleElement) titleElement.classList.add('hidden-by-fullscreen'); // HIDE TITLE
+                    // ADDED: Hide new button and recent chats sidebar in fullscreen
+                    const copySourceContainer = document.getElementById('copy-catbox-source-container');
+                    const recentChatsSidebar = document.getElementById('recent-chats-sidebar');
+                    if (copySourceContainer) copySourceContainer.classList.add('hidden-by-fullscreen');
+                    if (recentChatsSidebar) recentChatsSidebar.classList.add('hidden-by-fullscreen');
+
                     elementToToggle.classList.add('fullscreen-active-item');
                     if (parentMessageContainer) parentMessageContainer.classList.add('fullscreen-parent-active');
                     
@@ -663,6 +707,12 @@
                     if (slothElement) slothElement.classList.remove('hidden-by-fullscreen');
                     if (githubStatsSidebarElement) githubStatsSidebarElement.classList.remove('hidden-by-fullscreen');
                     if (titleElement) titleElement.classList.remove('hidden-by-fullscreen'); // SHOW TITLE
+                    // ADDED: Show new button and recent chats sidebar when exiting fullscreen
+                    const copySourceContainer = document.getElementById('copy-catbox-source-container');
+                    const recentChatsSidebar = document.getElementById('recent-chats-sidebar');
+                    if (copySourceContainer) copySourceContainer.classList.remove('hidden-by-fullscreen');
+                    if (recentChatsSidebar) recentChatsSidebar.classList.remove('hidden-by-fullscreen');
+
                     elementToToggle.classList.remove('fullscreen-active-item');
                     if (parentMessageContainer) parentMessageContainer.classList.remove('fullscreen-parent-active');
                     
@@ -703,6 +753,7 @@
         document.title = 'Error Loading Chat';
         if (counterElement) counterElement.classList.remove('loaded');
         if (counterTextSpan) counterTextSpan.classList.remove('loaded');
+        if (copyCatboxSourceButton) copyCatboxSourceButton.style.display = 'none'; // Hide button on error too
       }
     })(); // End of main IIFE
   </script>
@@ -764,98 +815,3 @@
             lastCommitEl.textContent = data.last_commit || 'N/A';
             lastCommitEl.classList.remove(LOADING_CLASS);
             if (isLastCommitOld(data.last_commit)) {
-                lastCommitEl.classList.add(CRITICAL_TIME_CLASS);
-            } else {
-                lastCommitEl.classList.remove(CRITICAL_TIME_CLASS);
-            }
-
-            commitsMonthEl.textContent = data.commits_past_month !== undefined ? data.commits_past_month : 'N/A';
-            commitsMonthEl.classList.remove(LOADING_CLASS);
-            reposPushedEl.textContent = data.repos_pushed_to !== undefined ? data.repos_pushed_to : 'N/A';
-            reposPushedEl.classList.remove(LOADING_CLASS);
-
-            commitMessagesUl.innerHTML = ''; 
-            if (data.recent_commit_messages && Array.isArray(data.recent_commit_messages) && data.recent_commit_messages.length > 0) {
-                data.recent_commit_messages
-                  .filter(msg => msg.trim().split(/\s+/).length > 1)
-                  .forEach(msg => {
-                    const li = document.createElement('li');
-                    li.textContent = msg;
-                    commitMessagesUl.appendChild(li);
-                });
-            } else {
-                const li = document.createElement('li');
-                li.textContent = 'No recent messages.';
-                commitMessagesUl.appendChild(li);
-            }
-        }
-
-        async function fetchAndProcessGitHubStats() {
-            try {
-                const response = await fetch(GITHUB_API_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-                updateSidebarUI(data);
-            } catch (error) {
-                console.error('Failed to load GitHub stats:', error);
-                const commitMessagesUl = document.getElementById(COMMIT_MESSAGES_ID);
-                if (commitMessagesUl) {
-                    const errorLi = document.createElement('li');
-                    errorLi.textContent = 'Failed to load stats.';
-                    errorLi.style.color = '#D32F2F';
-                    if (commitMessagesUl.firstChild && commitMessagesUl.firstChild.classList && commitMessagesUl.firstChild.classList.contains(LOADING_CLASS)) {
-                       commitMessagesUl.innerHTML = '';
-                    }
-                    if (!commitMessagesUl.querySelector('li[style*="color: #D32F2F"]')) {
-                        commitMessagesUl.appendChild(errorLi);
-                    }
-                }
-                [LAST_COMMIT_ID, COMMITS_MONTH_ID, REPOS_PUSHED_ID].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el && el.classList.contains(LOADING_CLASS)) {
-                        el.textContent = 'Error';
-                        el.classList.remove(LOADING_CLASS);
-                        el.style.color = '#D32F2F';
-                    }
-                });
-            }
-        }
-
-        function initGitHubStatsSidebar() {
-            const sidebarElement = getSidebarElement();
-            if (!sidebarElement) {
-                return;
-            }
-
-            const cachedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-            if (cachedData) {
-                try {
-                    updateSidebarUI(JSON.parse(cachedData));
-                } catch (e) {
-                    console.warn("Failed to parse cached GitHub stats, removing.", e);
-                    localStorage.removeItem(LOCAL_STORAGE_KEY);
-                    const commitMessagesUl = document.getElementById(COMMIT_MESSAGES_ID);
-                    if(commitMessagesUl) commitMessagesUl.innerHTML = `<li class="${LOADING_CLASS}">Loading...</li>`;
-                    [LAST_COMMIT_ID, COMMITS_MONTH_ID, REPOS_PUSHED_ID].forEach(id => {
-                        const el = document.getElementById(id);
-                        if(el) {
-                            el.textContent = 'Loading...';
-                            el.classList.add(LOADING_CLASS);
-                            el.style.color = '';
-                        }
-                    });
-                }
-            }
-            fetchAndProcessGitHubStats();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initGitHubStatsSidebar();
-        });
-    })();
-  </script>
-</body>
-</html>
