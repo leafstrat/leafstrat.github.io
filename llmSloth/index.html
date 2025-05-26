@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <title>LLM Sloth</title>
   <link rel="icon" href="favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    </style>
 </head>
 <body>
   <!-- ADDED CONTAINER AND BUTTON FOR COPY SOURCE -->
@@ -13,7 +15,7 @@
   </div>
 
   <!-- ADDED RECENT CHATS SIDEBAR -->
-  <aside id="recent-chats-sidebar"> 
+  <aside id="recent-chats-sidebar">
     <ul id="recent-chats-list">
       <!-- Populated by JavaScript -->
     </ul>
@@ -41,6 +43,17 @@
   </div>
   <div class="custom-notification" id="custom-notification-fallback"></div>
   <img src="https://em-content.zobj.net/source/google/223/sloth_1f9a5.png" class="sloth-img" id="sloth-top-right">
+
+  <!-- ADDED KEYBOARD SHORTCUTS BOX -->
+  <div id="keyboard-shortcuts-box">
+    <h4>Shortcuts:</h4>
+    <ul>
+      <li><code>j</code> select down next codeblock</li>
+      <li><code>k</code> prev codeblock</li>
+      <li><code>spacebar</code> open codeblock in fullscreen</li>
+      <li><code>g</code> copy codeblock</li>
+    </ul>
+  </div>
 
   <!-- SCRIPT FOR RECENT CHATS SIDEBAR -->
   <script>
@@ -129,11 +142,11 @@
             chats.forEach(chat => {
                 const li = document.createElement('li');
                 const a = document.createElement('a');
-                
+
                 a.href = `${CHAT_PAGE_BASE_URL}?id=${chat.id}`;
                 a.textContent = chat.title || `Chat: ${chat.id}`; // Fallback if title is somehow null/empty
                 a.title = `${chat.title || 'Untitled Chat'} (ID: ${chat.id})\nViewed: ${new Date(chat.date).toLocaleString()}`;
-                
+
                 // Highlight the link if it matches the currently viewed chat
                 if (chat.id === currentChatId) {
                     a.classList.add('active-chat-link');
@@ -183,7 +196,7 @@
       const ICON_PATH = '/favicon.ico';
       const HLJS_RETRY_DELAY_MS = 500;
       const HLJS_MAX_RETRIES = 2;
-                const MIN_LINES_FOR_FULLSCREEN = 10;
+      const MIN_LINES_FOR_FULLSCREEN = 10;
       const MIN_LOC_TO_SHOW_COUNT = 7;
       const SECONDS_UPDATE_INTERVAL_MS = 10000; // Now correctly scoped
 
@@ -209,6 +222,7 @@
       slothElement = document.getElementById('sloth-top-right');
       githubStatsSidebarElement = document.getElementById('github-stats-sidebar');
       const copyCatboxSourceButton = document.getElementById('copy-catbox-source-button'); // Get the new button
+      const keyboardShortcutsBox = document.getElementById('keyboard-shortcuts-box'); // Get the shortcut box
 
       // --- Time Column Helper Functions (Moved Inside IIFE) ---
       function formatSecondsForDisplay(seconds) {
@@ -254,7 +268,7 @@
         const localAMPM = localHours >= 12 ? 'pm' : 'am';
         let displayHours = localHours % 12;
         displayHours = displayHours ? displayHours : 12;
-        
+
         const secondsBlock = document.createElement('div');
         secondsBlock.className = 'time_block';
         secondsBlock.innerHTML = `
@@ -424,11 +438,11 @@
             } else if (retries > 0) {
                 setTimeout(() => applyHighlighting(retries - 1), HLJS_RETRY_DELAY_MS);
             } else {
-                updateLineCounts(); 
+                updateLineCounts();
             }
         }
 
-                applyHighlighting();
+        applyHighlighting();
 
         function updateLineCounts() {
             document.querySelectorAll('pre[data-nav-id] code').forEach(codeElement => {
@@ -480,6 +494,10 @@
           } else if (event.code === 'Space' || event.key === ' ') {
             event.preventDefault();
             toggleExpandCurrent();
+          } else if (key === 'g') { // MODIFIED: Added 'g' key handler
+            if (isFullscreen) return; // Optionally allow copy in fullscreen if desired
+            event.preventDefault();
+            copyCurrentItem(); // Call copyCurrentItem on 'g'
           }
         });
 
@@ -501,8 +519,8 @@
                     currentIndex = newIndex;
                     highlightItem(currentIndex);
                     updateCounter();
-                    copyCurrentItem();
-                    scrollToItem(currentIndex); // Default smooth scroll on click
+                    // copyCurrentItem(); // MODIFIED: Removed auto-copy on click
+                    scrollToItem(currentIndex);
                 }
             }
         });
@@ -512,8 +530,8 @@
           currentIndex++;
           highlightItem(currentIndex);
           updateCounter();
-          copyCurrentItem();
-          scrollToItem(currentIndex); // Default smooth scroll
+          // copyCurrentItem(); // MODIFIED: Removed auto-copy on navigation
+          scrollToItem(currentIndex);
         }
 
         function navigatePrevious() {
@@ -521,8 +539,8 @@
           currentIndex--;
           highlightItem(currentIndex);
           updateCounter();
-          copyCurrentItem();
-          scrollToItem(currentIndex); // Default smooth scroll
+          // copyCurrentItem(); // MODIFIED: Removed auto-copy on navigation
+          scrollToItem(currentIndex);
         }
 
         function highlightItem(index) {
@@ -552,7 +570,6 @@
           }
         }
 
-        // MODIFIED: Added behavior parameter, defaults to 'smooth'
         function scrollToItem(index, behavior = 'smooth') {
             if (index < 0 || index >= totalNavigable || !navigableItems[index]) return;
 
@@ -582,7 +599,7 @@
               navigator.clipboard.writeText(textToCopy)
                 .then(() => {
                   const firstLine = textToCopy.split('\n')[0].substring(0, NOTIFICATION_BODY_MAX_LENGTH) + (textToCopy.split('\n')[0].length > NOTIFICATION_BODY_MAX_LENGTH ? '...' : '');
-                  showBrowserNotification(notificationTitle, firstLine); // MODIFIED: Uncommented
+                  showBrowserNotification(notificationTitle, firstLine);
                 })
                 .catch(err => {
                   console.error("Failed to copy to clipboard:", err);
@@ -637,7 +654,6 @@
         });
     }
 
-    // MODIFIED: toggleExpandCurrent for fullscreen behavior
     function toggleExpandCurrent() {
         if (currentIndex < 0 || currentIndex >= totalNavigable) return;
         const currentItem = navigableItems[currentIndex];
@@ -671,16 +687,16 @@
                     document.body.classList.add('fullscreen-codeblock-active');
                     if (slothElement) slothElement.classList.add('hidden-by-fullscreen');
                     if (githubStatsSidebarElement) githubStatsSidebarElement.classList.add('hidden-by-fullscreen');
-                    if (titleElement) titleElement.classList.add('hidden-by-fullscreen'); // HIDE TITLE
-                    // ADDED: Hide new button and recent chats sidebar in fullscreen
+                    if (titleElement) titleElement.classList.add('hidden-by-fullscreen');
                     const copySourceContainer = document.getElementById('copy-catbox-source-container');
                     const recentChatsSidebar = document.getElementById('recent-chats-sidebar');
                     if (copySourceContainer) copySourceContainer.classList.add('hidden-by-fullscreen');
                     if (recentChatsSidebar) recentChatsSidebar.classList.add('hidden-by-fullscreen');
+                    if (keyboardShortcutsBox) keyboardShortcutsBox.classList.add('hidden-by-fullscreen'); // MODIFIED: Hide shortcut box
 
                     elementToToggle.classList.add('fullscreen-active-item');
                     if (parentMessageContainer) parentMessageContainer.classList.add('fullscreen-parent-active');
-                    
+
                     Array.from(contentRoot.children).forEach(childOfContent => {
                         if (childOfContent !== parentMessageContainer) {
                            childOfContent.classList.add('hidden-by-fullscreen');
@@ -689,14 +705,13 @@
                     if (parentMessageContainer) {
                         hideNonAncestorsOrTarget(parentMessageContainer, elementToToggle);
                     }
-                    
-                    // MODIFIED: Immediate scroll to top, no timeout
-                    window.scrollTo({ top: 0, behavior: 'auto' }); 
-                    elementToToggle.scrollTop = 0; 
+
+                    window.scrollTo({ top: 0, behavior: 'auto' });
+                    elementToToggle.scrollTop = 0;
                     elementToToggle.focus({ preventScroll: true });
 
                 } else { // Already in fullscreen, just re-expanding
-                    setTimeout(() => { // Keep small delay for focus/scrollTop *within* fullscreen
+                    setTimeout(() => {
                         elementToToggle.scrollTop = 0;
                         elementToToggle.focus({ preventScroll: true });
                     }, EXPAND_SCROLL_DEBOUNCE_MS);
@@ -706,29 +721,28 @@
                     document.body.classList.remove('fullscreen-codeblock-active');
                     if (slothElement) slothElement.classList.remove('hidden-by-fullscreen');
                     if (githubStatsSidebarElement) githubStatsSidebarElement.classList.remove('hidden-by-fullscreen');
-                    if (titleElement) titleElement.classList.remove('hidden-by-fullscreen'); // SHOW TITLE
-                    // ADDED: Show new button and recent chats sidebar when exiting fullscreen
+                    if (titleElement) titleElement.classList.remove('hidden-by-fullscreen');
                     const copySourceContainer = document.getElementById('copy-catbox-source-container');
                     const recentChatsSidebar = document.getElementById('recent-chats-sidebar');
                     if (copySourceContainer) copySourceContainer.classList.remove('hidden-by-fullscreen');
                     if (recentChatsSidebar) recentChatsSidebar.classList.remove('hidden-by-fullscreen');
+                    if (keyboardShortcutsBox) keyboardShortcutsBox.classList.remove('hidden-by-fullscreen'); // MODIFIED: Show shortcut box
 
                     elementToToggle.classList.remove('fullscreen-active-item');
                     if (parentMessageContainer) parentMessageContainer.classList.remove('fullscreen-parent-active');
-                    
+
                     document.querySelectorAll('.hidden-by-fullscreen, .hidden-by-fullscreen-sibling').forEach(el => {
                         el.classList.remove('hidden-by-fullscreen');
                         el.classList.remove('hidden-by-fullscreen-sibling');
                     });
 
                     elementToToggle.focus({ preventScroll: true });
-                    // MODIFIED: Immediate jump back to position, then immediate scroll to item if needed
                     window.scrollTo({ top: lastScrollPositionBeforeFullscreen, behavior: 'auto' });
-                    scrollToItem(currentIndex, 'auto'); // Use 'auto' behavior
+                    scrollToItem(currentIndex, 'auto');
 
                 } else { // Just collapsing, not exiting fullscreen mode (was not fullscreen)
                      elementToToggle.focus({ preventScroll: true });
-                     setTimeout(() => scrollToItem(currentIndex), EXPAND_SCROLL_DEBOUNCE_MS); // Smooth scroll if collapsing non-fullscreen
+                     setTimeout(() => scrollToItem(currentIndex), EXPAND_SCROLL_DEBOUNCE_MS);
                 }
             }
         } else { // Not capable of fullscreen (short code block)
@@ -740,7 +754,7 @@
                     }
                     elementToToggle.focus({ preventScroll: true });
                 }, EXPAND_SCROLL_DEBOUNCE_MS);
-            
+
             } else { // Collapsed (short code block, was previously expanded, and not capable of fullscreen)
                 elementToToggle.focus({ preventScroll: true });
             }
@@ -748,7 +762,7 @@
     } // End of toggleExpandCurrent
 
       } catch (e) {
-        console.error("Error in main IIFE execution:", e); 
+        console.error("Error in main IIFE execution:", e);
         contentContainer.textContent = `Error loading or parsing JSON: ${e.message}`;
         document.title = 'Error Loading Chat';
         if (counterElement) counterElement.classList.remove('loaded');
@@ -826,7 +840,7 @@
             reposPushedEl.textContent = data.repos_pushed_to !== undefined ? data.repos_pushed_to : 'N/A';
             reposPushedEl.classList.remove(LOADING_CLASS);
 
-            commitMessagesUl.innerHTML = ''; 
+            commitMessagesUl.innerHTML = '';
             if (data.recent_commit_messages && Array.isArray(data.recent_commit_messages) && data.recent_commit_messages.length > 0) {
                 data.recent_commit_messages
                   .filter(msg => msg.trim().split(/\s+/).length > 1)

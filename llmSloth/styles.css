@@ -1,274 +1,274 @@
 :root
 {
-    --font-sans: sans-serif;
-    --bg-body: #d4dbcc;
-    --bg-pre: var(--bg-body);
-    --bg-code-block: #f3f3f3;
-    --text-main: #444;
-    --text-comment: #697070;
-    --text-punctuation-tag: rgba(68, 68, 68, 0.667);
-    --text-strong-red: #800;
-    --text-link-operator: #ab5656;
-    --text-literal: #695;
-    --text-green-code: #397300;
-    --text-meta-blue: #1f7199;
-    --text-meta-string-blue: #38a;
-    --text-counter: #fff;
-    --bg-counter-initial: rgba(0, 0, 0, 0.12);
-    --bg-counter-final: #666335;
-    --text-time-column: #888;
-    --text-notification: #fff;
-    --bg-notification: #333;
-    --color-active-highlight: #28a745;
-    --spacing-unit: 0.5rem;
-    --sidebar-width: 7rem; /* 112px if 1rem = 16px */
-    --content-padding: calc(var(--spacing-unit) * 3);
-    --message-margin-top: 1.25rem;
-    --message-padding: 0.1875rem;
-    --pre-padding: 0.0625rem;
-    --code-block-padding: 1em;
-    --inline-code-padding: 0.1875rem 0.3125rem;
-    --codeblock-max-height: 10.5rem;
-    --counter-padding: 0.3125rem 0.625rem;
-    --counter-font-size: 1.075rem;
-    --counter-border-radius: 0.9375rem;
-    --counter-holder-margin-bottom: 1.25rem;
-    --time-block-padding-y: 0.3125rem;
-    --time-block-margin-bottom: 0.625rem;
-    --notification-padding: 0.625rem 1.25rem;
-    --notification-border-radius: 0.3125rem;
-    --notification-offset: 1.25rem;
-    --content-margin-left-maximized: 15%; /* For wide screens */
-    --content-margin-right-maximized: 0%; /* For wide screens */
-    --content-margin-left-compact: 0; /* Default for medium/small screens */
-    --content-margin-right-compact: 0; /* Default for medium/small screens */
-    --sidebar-min-width-squished: 60px; /* Defined tightest point for sidebar-layout, includes padding */
-    --sidebar-squished-padding: 5px;
+	--font-sans: sans-serif;
+	--bg-body: #d4dbcc;
+	--bg-pre: var(--bg-body);
+	--bg-code-block: #f3f3f3;
+	--text-main: #444;
+	--text-comment: #697070;
+	--text-punctuation-tag: rgba(68, 68, 68, 0.667);
+	--text-strong-red: #800;
+	--text-link-operator: #ab5656;
+	--text-literal: #695;
+	--text-green-code: #397300;
+	--text-meta-blue: #1f7199;
+	--text-meta-string-blue: #38a;
+	--text-counter: #fff;
+	--bg-counter-initial: rgba(0, 0, 0, 0.12);
+	--bg-counter-final: #666335;
+	--text-time-column: #888;
+	--text-notification: #fff;
+	--bg-notification: #333;
+	--color-active-highlight: #28a745;
+	--spacing-unit: 0.5rem;
+	--sidebar-width: 7rem; /* 112px if 1rem = 16px */
+	--content-padding: calc(var(--spacing-unit) * 3);
+	--message-margin-top: 1.25rem;
+	--message-padding: 0.1875rem;
+	--pre-padding: 0.0625rem;
+	--code-block-padding: 1em;
+	--inline-code-padding: 0.1875rem 0.3125rem;
+	--codeblock-max-height: 10.5rem;
+	--counter-padding: 0.3125rem 0.625rem;
+	--counter-font-size: 1.075rem;
+	--counter-border-radius: 0.9375rem;
+	--counter-holder-margin-bottom: 1.25rem;
+	--time-block-padding-y: 0.3125rem;
+	--time-block-margin-bottom: 0.625rem;
+	--notification-padding: 0.625rem 1.25rem;
+	--notification-border-radius: 0.3125rem;
+	--notification-offset: 1.25rem;
+	--content-margin-left-maximized: 15%; /* For wide screens */
+	--content-margin-right-maximized: 0%; /* For wide screens */
+	--content-margin-left-compact: 0; /* Default for medium/small screens */
+	--content-margin-right-compact: 0; /* Default for medium/small screens */
+	--sidebar-min-width-squished: 60px; /* Defined tightest point for sidebar-layout, includes padding */
+	--sidebar-squished-padding: 5px;
 }
 
 /* Global Styles */
 *:focus
 {
-    outline: none !important;
+	outline: none !important;
 }
 
 body
 {
-    font-family: var(--font-sans);
-    padding: 0;
-    margin: 0;
-    background: var(--bg-body);
-    display: flex;
-    min-height: 100vh;
+	font-family: var(--font-sans);
+	padding: 0;
+	margin: 0;
+	background: var(--bg-body);
+	display: flex;
+	min-height: 100vh;
 }
 
 /* Layout */
 .sidebar-layout
 {
-    width: var(--sidebar-width);
-    padding-top: 2.6rem;
-    padding-left: var(--spacing-unit);
-    padding-right: var(--spacing-unit);
-    padding-bottom: var(--content-padding);
-    position: sticky;
-    top: 0;
-    left: 39px; /* Original offset for wide screens */
-    align-self: flex-start;
-    max-height: 100vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 100;
-    flex-shrink: 0; /* Does not shrink by default */
-    box-sizing: border-box;
+	width: var(--sidebar-width);
+	padding-top: 2.6rem;
+	padding-left: var(--spacing-unit);
+	padding-right: var(--spacing-unit);
+	padding-bottom: var(--content-padding);
+	position: sticky;
+	top: 0;
+	left: 39px; /* Original offset for wide screens */
+	align-self: flex-start;
+	max-height: 100vh;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 100;
+	flex-shrink: 0; /* Does not shrink by default */
+	box-sizing: border-box;
 }
 
 #content-layout
 {
-    flex-grow: 1; /* Takes available horizontal space */
-    margin-left: var(--content-margin-left-compact); /* Default */
-    margin-right: var(--content-margin-right-compact); /* Default */
-    min-width: 0; /* Crucial for allowing flex items to shrink properly */
-    display: flex;
-    flex-direction: column;
+	flex-grow: 1; /* Takes available horizontal space */
+	margin-left: var(--content-margin-left-compact); /* Default */
+	margin-right: var(--content-margin-right-compact); /* Default */
+	min-width: 0; /* Crucial for allowing flex items to shrink properly */
+	display: flex;
+	flex-direction: column;
 }
 
 /* Content Elements */
 #title
 {
-    padding: 11px 0px 11px 0px;
-    font-size: 30px;
-    font-weight: bold;
-    color: #666335;
-    margin-left: -2px;
- height: 58px;
-    line-height: 1.2; /* Explicit line-height */
-    box-sizing: border-box; /* Include padding in height calculation */
+	padding: 11px 0px 11px 0px;
+	font-size: 30px;
+	font-weight: bold;
+	color: #666335;
+	margin-left: -2px;
+	height: 58px;
+	line-height: 1.2; /* Explicit line-height */
+	box-sizing: border-box; /* Include padding in height calculation */
 }
 
 #brown {
-  flex-grow: 1;
-   background-color: #666335;  
+flex-grow: 1;
+background-color: #666335;  
 }
 
 #chat-id-link-container a {
-    color: #d4dbcc;
-    text-decoration: none;
-    font-size: 0.9em;
+color: #d4dbcc;
+text-decoration: none;
+font-size: 0.9em;
 }
 #chat-id-link-container a:hover {
-    text-decoration: underline;
+text-decoration: underline;
 }
 
 
 /* Counter Component */
 .counter_holder
 {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: var(--counter-holder-margin-bottom);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: var(--counter-holder-margin-bottom);
 }
 
 .counter
 {
-    color: var(--text-counter);
-    padding: var(--counter-padding);
-    font-size: var(--counter-font-size);
-    border-radius: var(--counter-border-radius);
+	color: var(--text-counter);
+	padding: var(--counter-padding);
+	font-size: var(--counter-font-size);
+	border-radius: var(--counter-border-radius);
 }
 
 .counter.loaded
 {
-    background-color: var(--bg-counter-final);
+	background-color: var(--bg-counter-final);
 }
 
 #counter-text-span
 {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+	opacity: 0;
+	transition: opacity 0.5s ease-in-out;
 }
 
 #counter-text-span.loaded
 {
-    opacity: 1;
+	opacity: 1;
 }
 
 /* Time Column Component */
 #time_column_container
 {
-    width: 100%;
+	width: 100%;
 }
 
 .time_column
 {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: var(--text-time-column);
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: var(--text-time-column);
 }
 
 .time_block
 {
-    width: 100%;
-    padding: var(--time-block-padding-y) 0;
-    text-align: center;
-    margin-bottom: var(--time-block-margin-bottom);
+	width: 100%;
+	padding: var(--time-block-padding-y) 0;
+	text-align: center;
+	margin-bottom: var(--time-block-margin-bottom);
 }
 
 .time_days,
 .time_seconds /* Shared style for dynamic parts */
 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1;
+	font-size: 1.25rem;
+	font-weight: 700;
+	line-height: 1;
 }
 
 .time_days_text,
 .time_seconds_text
 {
-    font-size: 0.625rem;
-    line-height: 1;
+	font-size: 0.625rem;
+	line-height: 1;
 }
 
 .time_year
 {
-    font-size: 1.125rem;
-    font-weight: 700;
-    line-height: 1;
+	font-size: 1.125rem;
+	font-weight: 700;
+	line-height: 1;
 }
 
 .time_month
 {
-    font-size: 0.75rem;
-    line-height: 1;
+	font-size: 0.75rem;
+	line-height: 1;
 }
 
 .time_hour
 {
-    font-size: 1rem;
-    line-height: 1;
+	font-size: 1rem;
+	line-height: 1;
 }
 
 /* Message Container */
 .message-container
 {
-    padding: var(--message-padding);
-    margin-bottom: 5px;
-    overflow-y: auto; /* Changed to auto for general case, fullscreen might override */
-    overflow-x: hidden;
-    position: relative;
-    box-sizing: border-box;
+	padding: var(--message-padding);
+	margin-bottom: 5px;
+	overflow-y: auto; /* Changed to auto for general case, fullscreen might override */
+	overflow-x: hidden;
+	position: relative;
+	box-sizing: border-box;
 }
 
 .message-container pre:first-of-type
 {
-    border-top: 0px solid #666335;
+	border-top: 0px solid #666335;
 }
 
 /* Code Blocks & Syntax Highlighting (Highlight.js) */
 pre
 {
-    padding: var(--pre-padding);
-    overflow: auto;
-    margin-top: 0;
-    margin-bottom: 0;
-    background: var(--bg-pre);
-    overflow-y: hidden;
-    position: relative;
+	padding: var(--pre-padding);
+	overflow: auto;
+	margin-top: 0;
+	margin-bottom: 0;
+	background: var(--bg-pre);
+	overflow-y: hidden;
+	position: relative;
 }
 
 
 
 code.hljs
 {
-    padding: var(--inline-code-padding);
+	padding: var(--inline-code-padding);
 }
 
 .hljs
 {
-    background: var(--bg-body); /* Changed from #d4dbcc to var */
-    color: var(--text-main);
+	background: var(--bg-body); /* Changed from #d4dbcc to var */
+	color: var(--text-main);
 }
 
 .hljs-tag .hljs-attr,
 .hljs-tag .hljs-name
 {
-    color: var(--text-main);
+	color: var(--text-main);
 }
 
 .hljs-comment
 {
-    color: var(--text-comment);
+	color: var(--text-comment);
 }
 
 .hljs-punctuation,
 .hljs-tag
 {
-    color: var(--text-punctuation-tag);
+	color: var(--text-punctuation-tag);
 }
 
 .hljs-attribute,
@@ -279,7 +279,7 @@ code.hljs
 .hljs-selector-tag,
 .hljs-strong
 {
-    font-weight: 700;
+	font-weight: 700;
 }
 
 .hljs-deletion,
@@ -291,14 +291,14 @@ code.hljs
 .hljs-template-tag,
 .hljs-type
 {
-    color: var(--text-strong-red);
+	color: var(--text-strong-red);
 }
 
 .hljs-section,
 .hljs-title
 {
-    color: var(--text-strong-red);
-    font-weight: 700;
+	color: var(--text-strong-red);
+	font-weight: 700;
 }
 
 .hljs-link,
@@ -310,12 +310,12 @@ code.hljs
 .hljs-template-variable,
 .hljs-variable
 {
-    color: var(--text-link-operator);
+	color: var(--text-link-operator);
 }
 
 .hljs-literal
 {
-    color: var(--text-literal);
+	color: var(--text-literal);
 }
 
 .hljs-addition,
@@ -323,85 +323,85 @@ code.hljs
 .hljs-bullet,
 .hljs-code
 {
-    color: var(--text-green-code);
+	color: var(--text-green-code);
 }
 
 .hljs-meta
 {
-    color: var(--text-meta-blue);
+	color: var(--text-meta-blue);
 }
 
 .hljs-meta .hljs-string
 {
-    color: var(--text-meta-string-blue);
+	color: var(--text-meta-string-blue);
 }
 
 .hljs-emphasis
 {
-    font-style: italic;
+	font-style: italic;
 }
 
 /* Navigable Code Blocks (pre[data-nav-id]) */
 pre[data-nav-id]
 {
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    border-top: 1px solid #666335;
-    border-bottom: 0px;
-    max-height: 90px;
-    overflow: hidden;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	border-top: 1px solid #666335;
+	border-bottom: 0px;
+	max-height: 90px;
+	overflow: hidden;
 }
 
 pre code.hljs
 {
-    display: block;
-    overflow-x: auto;
-		padding-top:3px;
-		padding-bottom:1px;
-		padding-left:10px;
-		padding-right:10px;
+	display: block;
+	overflow-x: auto;
+	padding-top:3px;
+	padding-bottom:1px;
+	padding-left:10px;
+	padding-right:10px;
 }
 
 pre[data-nav-id]::after
 {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 20px;
-		padding-right: 5px;
-		padding-top: 5px;    
-		background-color:inherit;
-    text-align: center;
-    pointer-events: none;
-    display: flex;
-    align-items: right;
-    justify-content: right;
-    font-size: 0.8em;
-    color: var(--text-main);
+	content: "";
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	height: 20px;
+	padding-right: 5px;
+	padding-top: 5px;    
+	background-color:inherit;
+	text-align: center;
+	pointer-events: none;
+	display: flex;
+	align-items: right;
+	justify-content: right;
+	font-size: 0.8em;
+	color: var(--text-main);
 }
 
 pre[data-nav-id][data-line-count]:not(.codeblock-expanded)::after
 {
-    content: attr(data-line-count) " LOC";
+	content: attr(data-line-count) " LOC";
 }
 
 pre[data-nav-id][data-loc-count-hidden="true"]::after
 {
-    display: none !important;
+	display: none !important;
 }
 
 pre[data-nav-id].nav-active
 {
-    border-color: #666335;
+	border-color: #666335;
 }
 
 pre[data-nav-id].nav-active::after,
 pre[data-nav-id].nav-active code.hljs
 {
-    background: #fff !important;		
+	background: #fff !important;		
 }
 
 
@@ -409,87 +409,87 @@ pre[data-nav-id].nav-active code.hljs
 /* Expanded Code Blocks */
 pre.codeblock-expanded
 {
-    max-height: none !important; /* Important for regular expansion */
-    overflow-y: auto;
+	max-height: none !important; /* Important for regular expansion */
+	overflow-y: auto;
 }
 
 pre.codeblock-expanded::after
 {
-    display: none;
+	display: none;
 }
 
 /* Notification Component */
 .custom-notification
 {
-    position: fixed;
-    bottom: var(--notification-offset);
-    right: var(--notification-offset);
-    background-color: var(--bg-notification);
-    color: var(--text-notification);
-    padding: var(--notification-padding);
-    border-radius: var(--notification-border-radius);
-    opacity: 0;
-    z-index: 1000;
-    pointer-events: none;
+	position: fixed;
+	bottom: var(--notification-offset);
+	right: var(--notification-offset);
+	background-color: var(--bg-notification);
+	color: var(--text-notification);
+	padding: var(--notification-padding);
+	border-radius: var(--notification-border-radius);
+	opacity: 0;
+	z-index: 1000;
+	pointer-events: none;
 }
 
 .custom-notification.show
 {
-    opacity: 1;
+	opacity: 1;
 }
 
 /* Mascot Image */
 .sloth-img /* Base style for sloth, display state controlled by media queries */
 {
-    position: fixed;
-    width: 220px;
-    height: 220px;
-    z-index: -1;
-    pointer-events: none;
-    display: block; /* Default to visible, hidden by narrower media query */
+	position: fixed;
+	width: 220px;
+	height: 220px;
+	z-index: -1;
+	pointer-events: none;
+	display: block; /* Default to visible, hidden by narrower media query */
 }
 
 #sloth-top-right
 {
-    top: 40px;
-    left: 98px;
+	top: 40px;
+	left: 98px;
 }
 
 /* Fullscreen Mode Styles */
 body.fullscreen-codeblock-active
 {
-    background-color: var(--bg-body);
-    overflow: hidden; /* Prevent body scroll when a codeblock is fullscreen */
+	background-color: var(--bg-body);
+	overflow: hidden; /* Prevent body scroll when a codeblock is fullscreen */
 }
 
 body.fullscreen-codeblock-active .sidebar-layout
 {
-    display: none !important;
+	display: none !important;
 }
 
 body.fullscreen-codeblock-active #content-layout
 {
-    margin-left: var(--content-margin-left-compact) !important;
-    margin-right: var(--content-margin-right-compact) !important;
-    max-width: 100%;
-    height: 100vh; /* Occupy full viewport height */
-    overflow: hidden; /* Prevent #content-layout from scrolling */
+	margin-left: var(--content-margin-left-compact) !important;
+	margin-right: var(--content-margin-right-compact) !important;
+	max-width: 100%;
+	height: 100vh; /* Occupy full viewport height */
+	overflow: hidden; /* Prevent #content-layout from scrolling */
 }
 
 .fullscreen-codeblock-active #brown {
-background-color: var(--bg-body);	
+	background-color: var(--bg-body);	
 }
 body.fullscreen-codeblock-active .fullscreen-parent-active
 {
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    display: flex !important; /* Use flex to make the child fill height */
-    flex-direction: column; /* Stack children vertically */
-    height: 100vh; /* Parent should also take full height */
-    overflow: hidden;
-		max-width: 890px;
-		margin: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	display: flex !important; /* Use flex to make the child fill height */
+	flex-direction: column; /* Stack children vertically */
+	height: 100vh; /* Parent should also take full height */
+	overflow: hidden;
+	max-width: 890px;
+	margin: auto !important;
 }
 
 
@@ -562,228 +562,272 @@ overflow-y: auto;
 
 pre {
 	font-size:10px;}
-body.fullscreen-codeblock-active .fullscreen-active-item
-{
-    margin: 0 !important;
-    border: 1px solid #666335 !important;
-    box-sizing: border-box;
-    display: block !important;
-    flex-grow: 1; /* Allow the code block to take available space */
-    height: 100%; /* Try to fill parent */
-    max-height: 100vh !important; /* Ensure it doesn't exceed viewport */
-    overflow-y: auto !important; /* Enable scrolling for the code block itself */
-}
-
-body.fullscreen-codeblock-active pre[data-nav-id]::after
-{
-    display: none;
-}
-
-.hidden-by-fullscreen,
-.hidden-by-fullscreen-sibling
-{
-    display: none !important;
-}
-
-
-/* GitHub Stats Sidebar specific styles */
-#github-stats-sidebar
-{
-    height: auto; /* Allow content to define height */
-    width: 312px;
-    min-width: 312px; /* Prevent shrinking beyond this */
-    padding-top:52px;
-    font-size: 14px;
-    color: #666335;
-    flex-shrink: 0; /* Ensures it doesn't shrink in the flex layout */
-}
-
-#github-stats-sidebar ul li:nth-of-type(odd)::before {
-    content: "⬭";
-}
-#github-stats-sidebar ul li:nth-of-type(even)::before {
-    content: "⬬";
-}
-
-#github-stats-sidebar ul li::before {
-    padding-right: 5px;
-}
-
-#github-stats-sidebar p {
-    padding-left:20px;
-    margin: 6.7px 0;
-}
-#gh-stats-commit-messages li:nth-of-type(odd) {color:#555;}
-#gh-stats-commit-messages li:nth-of-type(even) {color:#666335;}
-
-#gh-stats-commit-messages li {font-size:11px;}
-
-#github-stats-sidebar strong {
-    font-weight: 600;
-}
-#github-stats-sidebar ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 8px 0 0 0;
-}
-#github-stats-sidebar ul li {
-    margin-bottom: 4px;
-    padding-left: 33px;
-    padding-right: 33px;
-    text-indent: -13px;
-    word-break: break-word;
-    padding-top:11px;
-    padding-bottom:9px;
-    border-top:1px solid #b3b19360;
-}
-
-.gh-stats-time-critical {
-    color: #D32F2F !important;
-    font-weight: bold !important;
-}
-.gh-stats-loading {
-    font-style: italic;
-}
-
-
-/* Media Queries */
-
-@media (min-width: 1360px)
-{
-    #content-layout:not(body.fullscreen-codeblock-active #content-layout)
-    {
-        margin-left: var(--content-margin-left-maximized);
-        margin-right: var(--content-margin-right-maximized);
-    }
-}
-
-@media (max-width: 1359px)
-{
-    #sloth-top-right
-    {
-        display: none; 
-    }
-    body.fullscreen-codeblock-active #sloth-top-right.hidden-by-fullscreen { 
-        display: none !important;
-    }
-
-    .sidebar-layout
-    {
-        left: 0; 
-        width: auto; 
-        max-width: var(--sidebar-width); 
-        min-width: var(--sidebar-min-width-squished); 
-        flex-shrink: 1; 
-        padding-left: var(--sidebar-squished-padding);
-        padding-right: var(--sidebar-squished-padding);
-    }
-}
-
-@media (max-width: 575px) { 
-    #github-stats-sidebar:not(.hidden-by-fullscreen) {
-        display: none;
-    }
-}
-
-h1 {font-size:16px; margin-bottom:0px;}
-#brown {color:#d4dbcc;}
-
-.message-container p:first-of-type {margin-top:0px;}
-
-
-#recent-chats-sidebar {
-position:fixed;
-top:273px;
-left:77px;
-width: 230px;
-flex-shrink: 0; 
-color: #e0e0e0;
-padding: 10px;
-box-sizing: border-box;
-height: 100vh;
-overflow-y: auto;  
-}
-
-
-#recent-chats-sidebar ul {
-list-style-type: none;
-padding: 0;
-margin: 0;
-}
-
-#recent-chats-sidebar li a {
-display: block;
-padding: 7px 10px;
-text-decoration: none;
-color: #737373;
-border-radius: 3px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-font-size: 0.85em;
-margin-bottom: 3px; 
-background-color: #c4ccba;
-}
-
-#recent-chats-sidebar li a:hover {
-background-color: #666335;
-color: #ffffff;
-}
-#recent-chats-sidebar li a.active-chat-link {
-background-color: #666335;
-color: #fff;
-font-weight: bold;
-}
-#recent-chats-sidebar li .no-chats-message { /* Style for "No recent chats" */
-background-color: #c4ccba;
-font-style: italic;
-color: #999;
-padding: 8px 10px;
-font-size: 0.85em;
-}
-
-#counter {margin-left:25px;}
-/* Adjust existing sidebar and main content to work within flex */
-.sidebar-layout {
-	flex-shrink: 0;
-	/* width should be defined in styles.css (e.g., var(--sidebar-width)) */
+	body.fullscreen-codeblock-active .fullscreen-active-item
+	{
+		margin: 0 !important;
+		border: 1px solid #666335 !important;
+		box-sizing: border-box;
+		display: block !important;
+		flex-grow: 1; /* Allow the code block to take available space */
+		height: 100%; /* Try to fill parent */
+		max-height: 100vh !important; /* Ensure it doesn't exceed viewport */
+		overflow-y: auto !important; /* Enable scrolling for the code block itself */
+	}
+	
+	body.fullscreen-codeblock-active pre[data-nav-id]::after
+	{
+		display: none;
+	}
+	
+	.hidden-by-fullscreen,
+	.hidden-by-fullscreen-sibling
+	{
+		display: none !important;
+	}
+	
+	
+	/* GitHub Stats Sidebar specific styles */
+	#github-stats-sidebar
+	{
+		height: auto; /* Allow content to define height */
+		width: 312px;
+		min-width: 312px; /* Prevent shrinking beyond this */
+		padding-top:52px;
+		font-size: 14px;
+		color: #666335;
+		flex-shrink: 0; /* Ensures it doesn't shrink in the flex layout */
+	}
+	
+	#github-stats-sidebar ul li:nth-of-type(odd)::before {
+	content: "⬭";
+	}
+	#github-stats-sidebar ul li:nth-of-type(even)::before {
+	content: "⬬";
+	}
+	
+	#github-stats-sidebar ul li::before {
+	padding-right: 5px;
+	}
+	
+	#github-stats-sidebar p {
+	padding-left:20px;
+	margin: 6.7px 0;
+	}
+	#gh-stats-commit-messages li:nth-of-type(odd) {color:#555;}
+	#gh-stats-commit-messages li:nth-of-type(even) {color:#666335;}
+	
+	#gh-stats-commit-messages li {font-size:11px;}
+	
+	#github-stats-sidebar strong {
+	font-weight: 600;
+	}
+	#github-stats-sidebar ul {
+	list-style-type: none;
+	padding-left: 0;
+	margin: 8px 0 0 0;
+	}
+	#github-stats-sidebar ul li {
+	margin-bottom: 4px;
+	padding-left: 33px;
+	padding-right: 33px;
+	text-indent: -13px;
+	word-break: break-word;
+	padding-top:11px;
+	padding-bottom:9px;
+	border-top:1px solid #b3b19360;
+	}
+	
+	.gh-stats-time-critical {
+		color: #D32F2F !important;
+		font-weight: bold !important;
+	}
+	.gh-stats-loading {
+		font-style: italic;
+	}
+	
+	
+	/* Media Queries */
+	
+	@media (min-width: 1360px)
+	{
+		#content-layout:not(body.fullscreen-codeblock-active #content-layout)
+		{
+			margin-left: var(--content-margin-left-maximized);
+			margin-right: var(--content-margin-right-maximized);
+		}
+	}
+	
+	@media (max-width: 1359px)
+	{
+		#sloth-top-right
+		{
+			display: none; 
+		}
+		body.fullscreen-codeblock-active #sloth-top-right.hidden-by-fullscreen { 
+			display: none !important;
+		}
+		
+		.sidebar-layout
+		{
+			left: 0; 
+			width: auto; 
+			max-width: var(--sidebar-width); 
+			min-width: var(--sidebar-min-width-squished); 
+			flex-shrink: 1; 
+			padding-left: var(--sidebar-squished-padding);
+			padding-right: var(--sidebar-squished-padding);
+		}
+	}
+	
+	@media (max-width: 575px) { 
+		#github-stats-sidebar:not(.hidden-by-fullscreen) {
+		display: none;
+		}
+	}
+	
+	h1 {font-size:16px; margin-bottom:0px;}
+	#brown {color:#d4dbcc;}
+	
+	.message-container p:first-of-type {margin-top:0px;}
+	
+	
+	#recent-chats-sidebar {
+	position:fixed;
+	top:273px;
+	left:77px;
+	width: 230px;
+	flex-shrink: 0; 
+	color: #e0e0e0;
+	padding: 10px;
+	box-sizing: border-box;
 	height: 100vh;
+	overflow-y: auto;  
+	}
+	
+	
+	#recent-chats-sidebar ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	}
+	
+	#recent-chats-sidebar li a {
+	display: block;
+	padding: 7px 10px;
+	text-decoration: none;
+	color: #737373;
+	border-radius: 3px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 0.85em;
+	margin-bottom: 3px; 
+	background-color: #c4ccba;
+	}
+	
+	#recent-chats-sidebar li a:hover {
+	background-color: #666335;
+	color: #ffffff;
+	}
+	#recent-chats-sidebar li a.active-chat-link {
+	background-color: #666335;
+	color: #fff;
+	font-weight: bold;
+	}
+	#recent-chats-sidebar li .no-chats-message { /* Style for "No recent chats" */
+	background-color: #c4ccba;
+	font-style: italic;
+	color: #999;
+	padding: 8px 10px;
+	font-size: 0.85em;
+	}
+	
+	#counter {margin-left:25px;}
+	/* Adjust existing sidebar and main content to work within flex */
+	.sidebar-layout {
+		flex-shrink: 0;
+		/* width should be defined in styles.css (e.g., var(--sidebar-width)) */
+		height: 100vh;
+		overflow-y: auto;
+		/* Attempt to override fixed positioning if present, for flex layout */
+		position: relative !important; 
+	}
+	
+	
+	#content-layout {
+	/* 1. Allow #content-layout to stretch vertically with the page */
+	height: auto; /* Removes any fixed height like 100vh */
+	min-height: 0; /* Often good practice with flex children that might also scroll */
+	
+	/* 2. Ensure #content-layout is a flex container for #title and #brown */
+	display: flex;
+	flex-direction: column;
+	
+	/* 3. If #content-layout's own content (title + brown) overflows, allow scrolling.
+	 *    This was in your problematic rule and is generally fine. */
 	overflow-y: auto;
-	/* Attempt to override fixed positioning if present, for flex layout */
-	position: relative !important; 
-}
-
-
-#content-layout {
-/* 1. Allow #content-layout to stretch vertically with the page */
-height: auto; /* Removes any fixed height like 100vh */
-min-height: 0; /* Often good practice with flex children that might also scroll */
-
-/* 2. Ensure #content-layout is a flex container for #title and #brown */
-display: flex;
-flex-direction: column;
-
-/* 3. If #content-layout's own content (title + brown) overflows, allow scrolling.
- *    This was in your problematic rule and is generally fine. */
-overflow-y: auto;
-
-/* Retain other useful properties from your existing rules */
-flex-grow: 1; /* Allows it to take available horizontal space in the body's flex row */
-box-sizing: border-box;
-position: relative; /* If needed by its children */
-min-width: 0; /* Good for flex item responsiveness */
-margin-left: var(--content-margin-left-compact); /* From your original styles */
-margin-right: var(--content-margin-right-compact); /* From your original styles */
-}
-
-/* Fixed elements like sloth and github stats should remain unaffected */
-
-/* ADDED: Style for elements hidden during fullscreen */
-.hidden-by-fullscreen {
-	display: none !important;
-}
-
-/* ADDED: Style for fullscreen codeblock padding */
-.fullscreen-codeblock-active .fullscreen-active-item {
-	padding-bottom: 200px !important;
-}
+	
+	/* Retain other useful properties from your existing rules */
+	flex-grow: 1; /* Allows it to take available horizontal space in the body's flex row */
+	box-sizing: border-box;
+	position: relative; /* If needed by its children */
+	min-width: 0; /* Good for flex item responsiveness */
+	margin-left: var(--content-margin-left-compact); /* From your original styles */
+	margin-right: var(--content-margin-right-compact); /* From your original styles */
+	}
+	
+	/* Fixed elements like sloth and github stats should remain unaffected */
+	
+	/* ADDED: Style for elements hidden during fullscreen */
+	.hidden-by-fullscreen {
+		display: none !important;
+	}
+	
+	/* ADDED: Style for fullscreen codeblock padding */
+	.fullscreen-codeblock-active .fullscreen-active-item {
+		padding-bottom: 200px !important;
+	}
+	
+	
+	/* CSS for the keyboard shortcuts box */
+	#keyboard-shortcuts-box {
+	position: fixed;
+	bottom: 10px;
+	left: 10px;
+	background-color: #f9f9f9;
+	border: 1px solid #ccc;
+	padding: 10px 15px;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	z-index: 1000; /* Ensure it's above other content */
+	font-size: 0.8em;
+	opacity: 0.9;
+	}
+	#keyboard-shortcuts-box h4 {
+	margin-top: 0;
+	margin-bottom: 8px;
+	font-size: 0.9em;
+	color: #333;
+	}
+	#keyboard-shortcuts-box ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	}
+	#keyboard-shortcuts-box li {
+	margin-bottom: 4px;
+	color: #555;
+	}
+	#keyboard-shortcuts-box code {
+	background-color: #e0e0e0;
+	padding: 2px 5px;
+	border-radius: 3px;
+	font-family: monospace;
+	font-weight: bold;
+	color: #333;
+	margin-right: 5px;
+	}
+	/* Ensure hidden-by-fullscreen class works if not already defined */
+	.hidden-by-fullscreen {
+		display: none !important;
+	}
